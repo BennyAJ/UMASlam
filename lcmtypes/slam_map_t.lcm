@@ -21,5 +21,6 @@ struct slam_map_t
   int32_t cells_per_row; 
 
   // Map, represented as 2D array with dimensions of height times width
-  int16_t map[map_size];
+  // this gets converted into uint8_t in c++
+  byte map[map_size];
 }
