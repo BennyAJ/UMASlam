@@ -35,7 +35,7 @@ class slam_map_t
 
         int32_t    cells_per_row;
 
-        std::vector< int16_t > map;
+        std::vector< uint8_t > map;
 
     public:
         /**
@@ -158,7 +158,7 @@ int slam_map_t::_encodeNoHash(void *buf, int offset, int maxlen) const
     if(tlen < 0) return tlen; else pos += tlen;
 
     if(this->map_size > 0) {
-        tlen = __int16_t_encode_array(buf, offset + pos, maxlen - pos, &this->map[0], this->map_size);
+        tlen = __byte_encode_array(buf, offset + pos, maxlen - pos, &this->map[0], this->map_size);
         if(tlen < 0) return tlen; else pos += tlen;
     }
 
@@ -195,7 +195,7 @@ int slam_map_t::_decodeNoHash(const void *buf, int offset, int maxlen)
 
     if(this->map_size) {
         this->map.resize(this->map_size);
-        tlen = __int16_t_decode_array(buf, offset + pos, maxlen - pos, &this->map[0], this->map_size);
+        tlen = __byte_decode_array(buf, offset + pos, maxlen - pos, &this->map[0], this->map_size);
         if(tlen < 0) return tlen; else pos += tlen;
     }
 
@@ -213,13 +213,13 @@ int slam_map_t::_getEncodedSizeNoHash() const
     enc_size += __int32_t_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __int32_t_encoded_array_size(NULL, 1);
-    enc_size += __int16_t_encoded_array_size(NULL, this->map_size);
+    enc_size += __byte_encoded_array_size(NULL, this->map_size);
     return enc_size;
 }
 
 int64_t slam_map_t::_computeHash(const __lcm_hash_ptr *)
 {
-    int64_t hash = 0x00d30bd46569ccf4LL;
+    int64_t hash = 0x880b460cd66e4866LL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

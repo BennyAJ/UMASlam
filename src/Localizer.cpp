@@ -56,7 +56,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
   }
 
   last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
-  weightParticles(nullptr);
+  //weightParticles(nullptr);
 }
 
 void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,

@@ -20,7 +20,7 @@ public:
   GridMap();
 
   GridMap(double mnx, double mxx, double mny, double mxy, double ss);
-  GridMap(double mnx, double mxx, double mny, double mxy, double ss, std::vector<int16_t> map_in);
+  GridMap(double mnx, double mxx, double mny, double mxy, double ss, std::vector<uint8_t> map_in);
 
   GridMap(const GridMap& gm);
   const GridMap & operator=(const GridMap & gm);
@@ -44,14 +44,14 @@ public:
     return (x_idx + y_idx * cells_per_row);
   }
 
-  int16_t at(double x, double y) const
+  uint8_t at(double x, double y) const
   {
     std::size_t idx = convertToGridCoords(x,y);
     return map[idx];
   }
 
   //accesses the vector 
-  int16_t& at(double x, double y)
+  uint8_t& at(double x, double y)
   {
     std::size_t idx = convertToGridCoords(x,y);
     return map[idx];
@@ -86,12 +86,12 @@ public:
     return map.size();
   }
 
-  const int16_t& operator[](std::size_t idx) const 
+  const uint8_t& operator[](std::size_t idx) const 
   {
     return map[idx];
   }
 
-  int16_t& operator[](std::size_t idx)
+  uint8_t& operator[](std::size_t idx)
   {
     return map[idx];
   }
@@ -102,7 +102,7 @@ public:
 private:
   //actual map containing the probabilities 
   //idx 0 is bottom left (-y, -x)
-  std::vector<int16_t> map;
+  std::vector<uint8_t> map;
 
   //extents of the map in x and y
   double max_x;
