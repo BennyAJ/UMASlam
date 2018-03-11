@@ -112,6 +112,10 @@ private:
 
   // Stores the most recently received message's utime
   int64_t current_utime;
+
+  Velocity vel;
+  common::LCM::types::imu_t last_imu_data;
+
 };
 
 #endif

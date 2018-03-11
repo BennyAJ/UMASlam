@@ -67,6 +67,7 @@ private:
   // Angle of north relative to current position in radians
   double compass_north;
 
+  // same as above, but for imu
   double imu_north;
 
 };

@@ -13,8 +13,8 @@ Slam::Slam() : mapper(MIN_X, MAX_X, MIN_Y, MAX_Y, SQUARE_SIZE),
          num_mapped_scans(0),
          end_flag(false),
          reinitialized_fog(false),
-         compass_north(COMPASS_DEFAULT,
-         compass_north(COMPASS_DEFAULT)
+         compass_north(COMPASS_DEFAULT),
+         imu_north(COMPASS_DEFAULT)
 {
   llcm.subscribe(SLAM_POINT_CLOUD_CHANNEL, &Slam::handlePointCloud, this);
   llcm.subscribe(GPS_CHANNEL, &Slam::handleGPSData, this);
