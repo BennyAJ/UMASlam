@@ -22,9 +22,9 @@ void MapDrawer::switchMap(const GridMap& nmap)
   map = nmap;
 }
 
-void MapDrawer::addPose(const SLAM::Pose& pose)
+void MapDrawer::addPose(const SLAM::Pose& pose, string channel)
 {
-  poses.push_back(pose);
+  unOrdMap.insert(channel,pose);
 }
 
 void MapDrawer::startDraw()
@@ -146,7 +146,7 @@ void MapDrawer::handleState(const lcm::ReceiveBuffer * rbuf, const string & chan
   p.x = state->x;
   p.y = state->y;
   p.theta = state->yaw;
-  addPose(p);
+  addPose(p, chan);
 }
 
 void MapDrawer::handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const SLAM::LCM::slam_map_t * slam_map) {
@@ -156,22 +156,23 @@ void MapDrawer::handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & c
 
 void MapDrawer::drawBoat(sf::RenderWindow & win)
 {
-  if(poses.size() == 0)
+  if(unOrdMap.empty())
     return;
 
   sf::VertexArray boat;
   boat.setPrimitiveType(sf::Triangles);
   boat.resize(3);
+for(int i = 0; 0<possibleChans.size(); i++){
 
-  double forward_dx = cos(poses.back().theta);
-  double forward_dy = sin(poses.back().theta);
+  double forward_dx = cos(unOrdMap(possibleChans[i]).back().theta);
+  double forward_dy = sin(unOrdMap(possibleChans[i]).theta);
 
-  pair<double, double> coord2 = convertToPixelCoords(forward_dy + poses.back().y, 
-      -1 * (forward_dx + poses.back().x));
-  pair<double, double> coord1 = convertToPixelCoords(-forward_dy + forward_dx/2.0 + poses.back().y, 
-      -1 * (-forward_dx - forward_dy/2.0 + poses.back().x));
-  pair<double, double> coord3 = convertToPixelCoords(-forward_dy - forward_dx/2.0 + poses.back().y, 
-      -1 * (-forward_dx  + forward_dy/2.0 + poses.back().x));
+  pair<double, double> coord2 = convertToPixelCoords(forward_dy + unOrdMap(possibleChans[i]).back().y, 
+      -1 * (forward_dx + unOrdMap(possibleChans[i]).back().x));
+  pair<double, double> coord1 = convertToPixelCoords(-forward_dy + forward_dx/2.0 + unOrdMap(possibleChans[i]).back().y, 
+      -1 * (-forward_dx - forward_dy/2.0 + unOrdMap(possibleChans[i]).x));
+  pair<double, double> coord3 = convertToPixelCoords(-forward_dy - forward_dx/2.0 + unOrdMap(possibleChans[i]).y, 
+      -1 * (-forward_dx  + forward_dy/2.0 + unOrdMap(possibleChans[i]).x));
   
   boat[0].position = sf::Vector2f(coord1.first, coord1.second);
   boat[0].color = sf::Color::Blue;
@@ -182,19 +183,23 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
 
   win.draw(boat);
 }
+}
 
 void MapDrawer::drawPoses(sf::RenderWindow & win)
 {
   sf::VertexArray pose_line;
   pose_line.setPrimitiveType(sf::LinesStrip);
   pose_line.resize(poses.size());
-  for(size_t i = 0; i < poses.size(); ++i)
+for(int c = 0; c<possibleChans.size(); c++)
+{
+  for(size_t i = 0; i < unOrdMap(possibleChans[c].size(); ++i)
   {
-    SLAM::Pose p = poses[i];
+    SLAM::Pose p = unOrdMap(possibleChans[c])[i];
     pair<double, double> coords = convertToPixelCoords(p.y, -p.x);
     pose_line[i].position = sf::Vector2f(coords.first, coords.second);
     pose_line[i].color = sf::Color::Red;
   }
   win.draw(pose_line);
+}
 
 }

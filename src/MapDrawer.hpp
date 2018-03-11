@@ -19,6 +19,9 @@ constexpr size_t PIX_PER_SQUARE = 4;
 class MapDrawer
 {
 public:
+  MapDrawer(){
+  possibleChans = {"SLAM_STATE"};
+}
   void startDrawThread();
   void switchMap(const GridMap& nmap);
   void addPose(const SLAM::Pose& pose);
@@ -35,7 +38,7 @@ private:
 
   std::mutex map_mut;
   GridMap map;
-  std::vector<SLAM::Pose> poses;
-
+  std::unordered_map<std::string, vector<SLAM::Pose>>unOrdMap;
+  std::vector<string>possibleChans;
 };
 #endif
