@@ -47,6 +47,10 @@ public:
              const std::string & chan,
              const common::LCM::types::compass_t * compass_data);
 
+  void handleIMUData(const lcm::ReceiveBuffer * rbuf,
+             const std::string & chan,
+             const common::LCM::types::imu_t * imu_data);
+
   const GridMap& getMap();
 
   void printMap(std::ostream &os);
@@ -62,6 +66,8 @@ private:
   FakeCompass fake_compass;
   // Angle of north relative to current position in radians
   double compass_north;
+
+  double imu_north;
 
 };
 #endif

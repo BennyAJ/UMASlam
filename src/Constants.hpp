@@ -19,6 +19,10 @@
 #define SLAM_PARTICLE_CHANNEL "SLAM_PARTICLES"
 #define TRANSFORMED_IMU_CHANNEL "SENSOR_TRANSFORMED_IMU"
 
+
+// IMU stuff
+#define USE_IMU_PREDICTION 0
+
 //set to a higher number to print more debug logs
 #define SLAM_DEBUG_LEVEL 0
 

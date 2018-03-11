@@ -59,6 +59,10 @@ public:
               const std::string & chan,
               const SLAM::LCM::slam_pc_t * pc);
 
+  void handleIMUData(const lcm::ReceiveBuffer * rbuf,
+              const std::string & chan, 
+              const common::LCM::types::imu_t * imu_data);
+
   SLAM::Pose getPose() const;
 
   void updateMap(const GridMap & new_map);

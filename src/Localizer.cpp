@@ -74,6 +74,28 @@ void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
   //weightParticles(nullptr);
 }
 
+  void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
+                 const std::string & chan, 
+                 const imu_t * imu_data) {
+   double last_x_accel = last_imu_data.vdot;
+   double last_y_accel = last_imu_data.udot;
+ 
+   double x_accel = imu_data->vdot;
+   double y_accel = imu_data->udot;
+ 
+   if(last_utime == 0)
+    return;
+ 
+   // Width of trapezoid in seconds, utime is in microseconds
+   double time_diff = (imu_data->utime - last_utime) / 1000000.0;
+ 
+   // Trapezoidal Riemann sum between last two accelerations to find velocity
+   vel.x += time_diff * ((last_x_accel + x_accel) / 2);
+   vel.y += time_diff * ((last_y_accel + y_accel) / 2);
+ 
+   last_imu_data = *imu_data;
+  }
+
 void Localizer::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
                  const string & chan,
                  const slam_pc_t * pc)
@@ -377,6 +399,20 @@ void Localizer::createPredictionParticles(int64_t utime)
   
   random_device rd;
   mt19937 gen(rd());
+
+  double dx;
+  double dy;
+
+  if(USE_IMU_PREDICTION)
+  {
+    dx = vel.x;
+    dy = vel.y;
+  }
+  else 
+  {
+    dx = (last_coord.first - previous_gen_coord.first);
+    dy = (last_coord.second - previous_gen_coord.second);
+  }
 
   //calculate prediction params
   double dx = (last_coord.first - previous_gen_coord.first);
