@@ -57,7 +57,8 @@ const static int MINIMUM_LIDAR_HITS_TO_WEIGHT = 100;
 
 //GPS related localization coefficients
 //unit is meters
-//Data sheet values 1.5
+//Data sheet says less than 3 meters 95% of the time
+//So standard deviation must be 1.5 if GPS output is appx. normal
 const static double DEFAULT_GPS_SIGMA = 1.5;
 
 //FOG related localization coefficients
