@@ -24,7 +24,7 @@ void MapDrawer::switchMap(const GridMap& nmap)
 
 void MapDrawer::addPose(const SLAM::Pose& pose, string channel)
 {
-  unOrdMap.insert(channel,pose);
+  unOrdMap[channel].push_back(pose);
 }
 
 void MapDrawer::startDraw()
@@ -167,15 +167,15 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
   boat.resize(3);
 for(int i = 0; 0<possibleChans.size(); i++){
 
-  double forward_dx = cos(unOrdMap(possibleChans[i]).back().theta);
-  double forward_dy = sin(unOrdMap(possibleChans[i]).theta);
+  double forward_dx = cos(unOrdMap[possibleChans[i].first].back().theta);
+  double forward_dy = sin(unOrdMap[possibleChans[i].first].back().theta);
 
-  pair<double, double> coord2 = convertToPixelCoords(forward_dy + unOrdMap(possibleChans[i]).back().y, 
-      -1 * (forward_dx + unOrdMap(possibleChans[i]).back().x));
-  pair<double, double> coord1 = convertToPixelCoords(-forward_dy + forward_dx/2.0 + unOrdMap(possibleChans[i]).back().y, 
-      -1 * (-forward_dx - forward_dy/2.0 + unOrdMap(possibleChans[i]).x));
-  pair<double, double> coord3 = convertToPixelCoords(-forward_dy - forward_dx/2.0 + unOrdMap(possibleChans[i]).y, 
-      -1 * (-forward_dx  + forward_dy/2.0 + unOrdMap(possibleChans[i]).x));
+  pair<double, double> coord2 = convertToPixelCoords(forward_dy + unOrdMap[possibleChans[i].first].back().y, 
+      -1 * (forward_dx + unOrdMap[possibleChans[i].first].back().x));
+  pair<double, double> coord1 = convertToPixelCoords(-forward_dy + forward_dx/2.0 + unOrdMap[possibleChans[i].first].back().y, 
+      -1 * (-forward_dx - forward_dy/2.0 + unOrdMap[possibleChans[i].first].back().x));
+  pair<double, double> coord3 = convertToPixelCoords(-forward_dy - forward_dx/2.0 + unOrdMap[possibleChans[i].first].back().y, 
+      -1 * (-forward_dx  + forward_dy/2.0 + unOrdMap[possibleChans[i].first].back().x));
   
   boat[0].position = sf::Vector2f(coord1.first, coord1.second);
   boat[0].color = sf::Color::Blue;
@@ -192,15 +192,15 @@ void MapDrawer::drawPoses(sf::RenderWindow & win)
 {
   sf::VertexArray pose_line;
   pose_line.setPrimitiveType(sf::LinesStrip);
-  pose_line.resize(poses.size());
-for(int c = 0; c<possibleChans.size(); c++)
+  pose_line.resize((unOrdMap[possibleChans[0].first]).size());
+for(size_t c = 0; c < possibleChans.size(); c++)
 {
-  for(size_t i = 0; i < unOrdMap(possibleChans[c].size(); ++i)
+  for(size_t i = 0; i < unOrdMap[possibleChans[c].first].size(); ++i)
   {
-    SLAM::Pose p = unOrdMap(possibleChans[c])[i];
+    SLAM::Pose p = unOrdMap[possibleChans[c].first][i];
     pair<double, double> coords = convertToPixelCoords(p.y, -p.x);
     pose_line[i].position = sf::Vector2f(coords.first, coords.second);
-    pose_line[i].color = sf::Color::Red;
+    pose_line[i].color = possibleChans[c].second;
   }
   win.draw(pose_line);
 }
