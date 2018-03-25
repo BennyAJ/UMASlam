@@ -1,6 +1,6 @@
 #ifndef __UMA_MAP_DRAWER_HPP__
 #define __UMA_MAP_DRAWER_HPP__
-
+#include <unordered_map>
 #include "GridMap.hpp"
 #include "../lcmtypes/state_t.hpp"
 #include "../lcmtypes/slam_map_t.hpp"
@@ -20,11 +20,11 @@ class MapDrawer
 {
 public:
   MapDrawer(){
-  possibleChans = {"SLAM_STATE"};
+  possibleChans.push_back(std::pair<std::string,sf::Color> ("SLAM_STATE",sf::Color::Red));
 }
   void startDrawThread();
   void switchMap(const GridMap& nmap);
-  void addPose(const SLAM::Pose& pose);
+  void addPose(const SLAM::Pose& pose, std::string channel);
   void startDraw();
   void drawMap(sf::RenderWindow & win);
   void drawPoses(sf::RenderWindow & win);
@@ -38,7 +38,7 @@ private:
 
   std::mutex map_mut;
   GridMap map;
-  std::unordered_map<std::string, vector<SLAM::Pose>>unOrdMap;
-  std::vector<string>possibleChans;
+  std::unordered_map<std::string,std::vector<SLAM::Pose>> unOrdMap;
+  std::vector<std::pair<std::string,sf::Color>>possibleChans;
 };
 #endif
