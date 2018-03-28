@@ -19,9 +19,9 @@ constexpr size_t PIX_PER_SQUARE = 4;
 class MapDrawer
 {
 public:
-  MapDrawer(){
-  possibleChans.push_back(std::pair<std::string,sf::Color> ("SLAM_STATE",sf::Color::Red));
-}
+  MapDrawer() {
+    possibleChans.push_back(std::pair<std::string,sf::Color> ("SLAM_STATE",sf::Color::Red));
+  }
   void startDrawThread();
   void switchMap(const GridMap& nmap);
   void addPose(const SLAM::Pose& pose, std::string channel);
