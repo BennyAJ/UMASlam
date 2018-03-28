@@ -9,7 +9,7 @@ OBJ_PATH = ./obj
 SRC_PATH = ./src
 TEST_PATH = ./unit_tests
 
-all: GridTest MapperTest Localizer Main PointCloudTest PointCloudPrinter ParticlePrinter PointCloudVis IMUTransformer
+all: GridTest MapperTest Localizer Main PointCloudTest PointCloudPrinter ParticlePrinter PointCloudVis IMUTransformer GPSTransformer
 
 optimized: FLAGS += $(OPTIMIZATION_FLAGS)
 optimized: all
@@ -56,6 +56,9 @@ ParticlePrinter: $(OBJ_PATH)/ParticlePrinter.o
 
 IMUTransformer: $(OBJ_PATH)/IMUTransformer.o
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUTransformer $(LCM_FLAGS)
+
+GPSTransformer: $(OBJ_PATH)/GPSTransformer.o
+	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/GPSTransformer $(LCM_FLAGS)
 
 test: GridTest MapperTest
 	./bin/GridTest >/dev/null
