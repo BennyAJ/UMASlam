@@ -57,7 +57,7 @@ ParticlePrinter: $(OBJ_PATH)/ParticlePrinter.o
 IMUTransformer: $(OBJ_PATH)/IMUTransformer.o
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUTransformer $(LCM_FLAGS)
 
-GPSTransformer: $(OBJ_PATH)/GPSTransformer.o
+GPSTransformer: $(OBJ_PATH)/CoordTransformer.o $(OBJ_PATH)/GPSTransformer.o
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/GPSTransformer $(LCM_FLAGS)
 
 test: GridTest MapperTest
