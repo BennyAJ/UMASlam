@@ -68,7 +68,7 @@ void MapDrawer::startDraw()
     //clear the window
     window.clear(sf::Color::White);
     drawMap(window);
-    drawPoses(window);
+    //drawPoses(window);
     drawBoat(window);
 
     view.zoom(current_zoom);
@@ -160,7 +160,7 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
   sf::VertexArray boat;
   boat.setPrimitiveType(sf::Triangles);
   boat.resize(3);
-  for(int i = 0; 0 < possibleChans.size(); i++){
+  for(size_t i = 0; i < possibleChans.size(); i++){
     if(unOrdMap[possibleChans[i].first].empty())
       return;
 

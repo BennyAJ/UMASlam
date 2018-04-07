@@ -2,6 +2,7 @@
 #define __UMA_MAP_DRAWER_HPP__
 #include <unordered_map>
 #include "GridMap.hpp"
+#include "Constants.hpp"
 #include "../lcmtypes/state_t.hpp"
 #include "../lcmtypes/slam_map_t.hpp"
 #include <SFML/Graphics.hpp>
@@ -20,7 +21,7 @@ class MapDrawer
 {
 public:
   MapDrawer() {
-    possibleChans.push_back(std::pair<std::string,sf::Color> ("SLAM_STATE",sf::Color::Red));
+    possibleChans.push_back(std::pair<std::string,sf::Color> (SLAM_STATE_CHANNEL,sf::Color::Red));
   }
   void startDrawThread();
   void switchMap(const GridMap& nmap);
