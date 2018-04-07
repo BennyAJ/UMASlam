@@ -68,7 +68,7 @@ void MapDrawer::startDraw()
     //clear the window
     window.clear(sf::Color::White);
     drawMap(window);
-    //drawPoses(window);
+    drawPoses(window);
     drawBoat(window);
 
     view.zoom(current_zoom);
@@ -160,31 +160,30 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
   sf::VertexArray boat;
   boat.setPrimitiveType(sf::Triangles);
   boat.resize(3);
-  for(size_t i = 0; i < possibleChans.size(); i++){
-    if(unOrdMap[possibleChans[i].first].empty())
-      return;
+  for(size_t i = 0; i < possibleChans.size(); i++) {
+    if(!unOrdMap[possibleChans[i].first].empty()) {
+      double forward_dx = cos(unOrdMap[possibleChans[i].first].back().theta);
+      double forward_dy = sin(unOrdMap[possibleChans[i].first].back().theta);
 
-    double forward_dx = cos(unOrdMap[possibleChans[i].first].back().theta);
-    double forward_dy = sin(unOrdMap[possibleChans[i].first].back().theta);
+      double pose_y = unOrdMap[possibleChans[i].first].back().y;
+      double pose_x = unOrdMap[possibleChans[i].first].back().x;
 
-    double pose_y = unOrdMap[possibleChans[i].first].back().y;
-    double pose_x = unOrdMap[possibleChans[i].first].back().x;
+      pair<double, double> coord2 = convertToPixelCoords(forward_dy + pose_y, 
+          -1 * (forward_dx + pose_x));
+      pair<double, double> coord1 = convertToPixelCoords(-forward_dy + forward_dx/2.0 + pose_y, 
+          -1 * (-forward_dx - forward_dy/2.0 + pose_x));
+      pair<double, double> coord3 = convertToPixelCoords(-forward_dy - forward_dx/2.0 + pose_y, 
+          -1 * (-forward_dx  + forward_dy/2.0 + pose_x));
+      
+      boat[0].position = sf::Vector2f(coord1.first, coord1.second);
+      boat[0].color = sf::Color::Blue;
+      boat[1].position = sf::Vector2f(coord2.first, coord2.second);
+      boat[1].color = sf::Color::Red;
+      boat[2].position = sf::Vector2f(coord3.first, coord3.second);
+      boat[2].color = sf::Color::Blue;
 
-    pair<double, double> coord2 = convertToPixelCoords(forward_dy + pose_y, 
-        -1 * (forward_dx + pose_x));
-    pair<double, double> coord1 = convertToPixelCoords(-forward_dy + forward_dx/2.0 + pose_y, 
-        -1 * (-forward_dx - forward_dy/2.0 + pose_x));
-    pair<double, double> coord3 = convertToPixelCoords(-forward_dy - forward_dx/2.0 + pose_y, 
-        -1 * (-forward_dx  + forward_dy/2.0 + pose_x));
-    
-    boat[0].position = sf::Vector2f(coord1.first, coord1.second);
-    boat[0].color = sf::Color::Blue;
-    boat[1].position = sf::Vector2f(coord2.first, coord2.second);
-    boat[1].color = sf::Color::Red;
-    boat[2].position = sf::Vector2f(coord3.first, coord3.second);
-    boat[2].color = sf::Color::Blue;
-
-    win.draw(boat);
+      win.draw(boat);
+    }
   }
 }
 

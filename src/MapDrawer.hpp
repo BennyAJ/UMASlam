@@ -22,6 +22,7 @@ class MapDrawer
 public:
   MapDrawer() {
     possibleChans.push_back(std::pair<std::string,sf::Color> (SLAM_STATE_CHANNEL,sf::Color::Red));
+    possibleChans.push_back(std::pair<std::string,sf::Color> (GPS_STATE_CHANNEL,sf::Color::Blue));
   }
   void startDrawThread();
   void switchMap(const GridMap& nmap);
