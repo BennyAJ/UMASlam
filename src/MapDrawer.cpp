@@ -160,6 +160,7 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
   sf::VertexArray boat;
   boat.setPrimitiveType(sf::Triangles);
   boat.resize(3);
+<<<<<<< HEAD
   for(size_t i = 0; i < possibleChans.size(); i++) {
     if(!unOrdMap[possibleChans[i].first].empty()) {
       double forward_dx = cos(unOrdMap[possibleChans[i].first].back().theta);
