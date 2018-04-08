@@ -194,7 +194,8 @@ void MapDrawer::drawPoses(sf::RenderWindow & win)
   for(size_t c = 0; c < possibleChans.size(); c++)
   {
     pose_line.resize((unOrdMap[possibleChans[c].first]).size());
-    for(size_t i = 0; i < unOrdMap[possibleChans[c].first].size(); ++i)
+
+    for(size_t i = 0; i < pose_line.getVertexCount(); i++)
     {
       SLAM::Pose p = unOrdMap[possibleChans[c].first][i];
       pair<double, double> coords = convertToPixelCoords(p.y, -p.x);
