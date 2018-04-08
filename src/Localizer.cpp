@@ -57,6 +57,16 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
 
   last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
   //weightParticles(nullptr);
+
+  state_t gps_pub_state;
+  gps_pub_state.utime = last_pose.utime;
+  gps_pub_state.x = last_coord.first;
+  gps_pub_state.y = last_coord.second;
+  gps_pub_state.yaw = last_theta;
+  gps_pub_state.origLat = coord_transformer.getOriginLat();
+  gps_pub_state.origLon = coord_transformer.getOriginLon();
+  lcm::LCM l;
+  l.publish(GPS_STATE_CHANNEL, &gps_pub_state);
 }
 
 void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
