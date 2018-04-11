@@ -1,4 +1,3 @@
-package common.LCM.types;
 struct compass_t {
 	int64_t utime;
 

@@ -6,16 +6,10 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __common_LCM_types_fog_t_hpp__
-#define __common_LCM_types_fog_t_hpp__
+#ifndef __fog_t_hpp__
+#define __fog_t_hpp__
 
 
-namespace common
-{
-namespace LCM
-{
-namespace types
-{
 
 /**
  * 		- 'data' is measured about the vertical axis. 
@@ -178,12 +172,6 @@ int64_t fog_t::_computeHash(const __lcm_hash_ptr *)
 {
     int64_t hash = 0x912a628047321ba5LL;
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
-}
-
 }
 
 #endif

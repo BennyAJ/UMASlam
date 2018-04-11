@@ -6,16 +6,10 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __common_LCM_types_servo_t_hpp__
-#define __common_LCM_types_servo_t_hpp__
+#ifndef __servo_t_hpp__
+#define __servo_t_hpp__
 
 
-namespace common
-{
-namespace LCM
-{
-namespace types
-{
 
 class servo_t
 {
@@ -28,7 +22,6 @@ class servo_t
 
         int32_t    dir;
 
-        /// 1 = UP  -1 = DOWN
         float      max_angle;
 
         float      min_angle;
@@ -191,12 +184,6 @@ int64_t servo_t::_computeHash(const __lcm_hash_ptr *)
 {
     int64_t hash = 0x31467b1792d62ff5LL;
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
-}
-
 }
 
 #endif

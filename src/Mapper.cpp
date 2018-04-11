@@ -5,8 +5,6 @@
 #include <sys/time.h>
 
 using namespace std;
-using namespace common::LCM::types;
-using namespace SLAM::LCM;
 
 Mapper::Mapper(double mnx, double mxx, double mny, double mxy, double ss) :
   map(mnx, mxx, mny, mxy, ss),
@@ -24,7 +22,7 @@ void Mapper::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
 
 void Mapper::handleState(const lcm::ReceiveBuffer * rbuf,
              const string & chan, 
-             const state_t * state)
+             const slam_state_t * state)
 {
   this->addPose(SLAM::Pose(state->x, state->y, state->yaw, state->utime));
 }

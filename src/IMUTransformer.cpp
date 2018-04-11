@@ -4,7 +4,6 @@
 #include <cmath>
 
 using namespace std;
-using namespace common::LCM::types;
 
 void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
                     const string & chan,
@@ -19,9 +18,10 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
   lcm.publish(TRANSFORMED_IMU_CHANNEL, &publish_imu);
 }
 
+
 void IMUTransformer::handleSLAMState(const lcm::ReceiveBuffer * rbuf,
                   const string & chan,
-                  const state_t * slam_state)
+                  const slam_state_t * slam_state)
 {
   last_yaw = slam_state->yaw;
 }

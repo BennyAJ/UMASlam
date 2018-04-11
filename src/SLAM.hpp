@@ -8,7 +8,7 @@
 #include "../lcmtypes/fog_t.hpp"
 #include "../lcmtypes/gps_t.hpp"
 #include "../lcmtypes/compass_t.hpp"
-#include "../lcmtypes/state_t.hpp"
+#include "../lcmtypes/slam_state_t.hpp"
 
 #include <string>
 #include <mutex>
@@ -29,23 +29,23 @@ public:
 
   void handlePointCloud(const lcm::ReceiveBuffer * rbuf, 
               const std::string & chan,
-              const SLAM::LCM::slam_pc_t * pc);
+              const slam_pc_t * pc);
 
   void handleState(const lcm::ReceiveBuffer * rbuf,
            const std::string & chan,
-           const common::LCM::types::state_t * state);
+           const slam_state_t * state);
 
   void handleGPSData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const common::LCM::types::gps_t * gps_data);
+             const gps_t * gps_data);
 
   void handleFOGData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const common::LCM::types::fog_t * fog_data);
+             const fog_t * fog_data);
 
   void handleCompassData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const common::LCM::types::compass_t * compass_data);
+             const compass_t * compass_data);
 
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,

@@ -3,7 +3,6 @@
 #include <algorithm>
 
 using namespace std;
-using namespace common::LCM::types;
 
 double FakeCompass::getNorthLocation()
 {

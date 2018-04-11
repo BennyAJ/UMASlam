@@ -1,0 +1,11 @@
+struct servo_t {
+	int64_t utime;
+
+	float angle;
+	float a_vel;
+
+	int32_t dir;	// 1 = UP  -1 = DOWN
+
+	float max_angle;
+	float min_angle;
+}

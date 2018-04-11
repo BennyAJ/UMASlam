@@ -49,15 +49,15 @@ public:
 
   void handleGPSData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const common::LCM::types::gps_t * gps_data);
+             const gps_t * gps_data);
 
   void handleFOGData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const common::LCM::types::fog_t * fog_data);
+             const fog_t * fog_data);
 
   void handlePointCloud(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan,
-              const SLAM::LCM::slam_pc_t * pc);
+              const slam_pc_t * pc);
 
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan, 
@@ -76,10 +76,10 @@ private:
   void createPredictionParticles(int64_t curr_utime);
   void createParticles(int64_t utime);
 
-  void weightParticles(const SLAM::LCM::slam_pc_t * pc);
+  void weightParticles(const slam_pc_t * pc);
   void weightParticlesWithGPS(const std::pair<double, double> & GPS_basis);
   void weightParticlesWithFOG(const double last_theta);
-  void weightParticlesWithCloud(const SLAM::LCM::slam_pc_t & pc);
+  void weightParticlesWithCloud(const slam_pc_t & pc);
 
   void boundLikelihoods(std::vector<double> & likelihoods, double min_likelihood, double max_likelihood) const;
   void setPose(int64_t utime);

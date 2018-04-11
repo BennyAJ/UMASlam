@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include "GridMap.hpp"
 #include "Constants.hpp"
-#include "../lcmtypes/state_t.hpp"
+#include "../lcmtypes/slam_state_t.hpp"
 #include "../lcmtypes/slam_map_t.hpp"
 #include <SFML/Graphics.hpp>
 #include <lcm/lcm-cpp.hpp>
@@ -33,8 +33,8 @@ public:
   void drawPoses(sf::RenderWindow & win);
   void drawBoat(sf::RenderWindow & win);
 
-  void handleState(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const common::LCM::types::state_t * state);
-  void handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const SLAM::LCM::slam_map_t * slam_map);
+  void handleState(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const slam_state_t * state);
+  void handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const slam_map_t * slam_map);
 
 private:
   std::pair<double, double> convertToPixelCoords(double x, double y);

@@ -6,71 +6,44 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __common_LCM_types_gps_t_hpp__
-#define __common_LCM_types_gps_t_hpp__
+#ifndef __gps_t_hpp__
+#define __gps_t_hpp__
 
 
-namespace common
-{
-namespace LCM
-{
-namespace types
-{
 
 class gps_t
 {
     public:
         int64_t    utime;
 
-        /// 				.gpgsa.timestamp
         double     latitude;
 
-        /// decimal degrees	.gpgll.latitude.decimal()
         double     longitude;
 
-        /// decimal degrees	.gpgll.latitude.decimal()
         double     altitude_sea_level;
 
-        /// 					.gpgga.altitude.sea_level
         double     altitude_geoidal;
 
-        /**
-         * 					.gpgga.altitude.geoidal
-         * 'course_over_ground' is the direction you're traveling in, relative to...true north? in degrees? clockwise?
-         */
         double     course_over_ground;
 
-        /// 					.gprmc.course_over_ground
         double     course_over_ground_magnetic;
 
-        /// 				.gpvtg.course_over_ground_mag
         double     speed;
 
-        /// mps				.gpvtg.speed_over_ground_KMpH * kmphTOmps
         double     magnetic_declination;
 
-        /**
-         * 				.gprmc.magnetic_var
-         * 				.* -1 if (gprmc.magnetic_var_dir == 'W')
-         */
         double     dilution_of_precision_horiz;
 
-        /// 				.gpgsa.dilution_of_precision.horiz
         double     dilution_of_precision_vert;
 
-        /// 				.gpgsa.dilution_of_precision.vert
         double     dilution_of_precision_pos;
 
-        /// 				.gpgsa.dilution_of_precision.pos
         int16_t    num_sats;
 
-        /// 				.gpgsa.num_satellites
         int16_t    satellites_S2N[12];
 
-        /// 				.gpgsv.satellites[0,1,2][1,2,3,4].sig2noise
         double     validmessages;
 
-        /// ?				.valid()
         double     gpsfix;
 
     public:
@@ -301,12 +274,6 @@ int64_t gps_t::_computeHash(const __lcm_hash_ptr *)
 {
     int64_t hash = 0xed3fc4eeb07ae170LL;
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
-}
-
 }
 
 #endif

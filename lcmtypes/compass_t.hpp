@@ -6,16 +6,10 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __common_LCM_types_compass_t_hpp__
-#define __common_LCM_types_compass_t_hpp__
+#ifndef __compass_t_hpp__
+#define __compass_t_hpp__
 
 
-namespace common
-{
-namespace LCM
-{
-namespace types
-{
 
 class compass_t
 {
@@ -190,12 +184,6 @@ int64_t compass_t::_computeHash(const __lcm_hash_ptr *)
 {
     int64_t hash = 0xfa06ae65bb852556LL;
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
-}
-
 }
 
 #endif

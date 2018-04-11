@@ -6,16 +6,12 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __SLAM_LCM_slam_pc_t_hpp__
-#define __SLAM_LCM_slam_pc_t_hpp__
+#ifndef __slam_pc_t_hpp__
+#define __slam_pc_t_hpp__
 
 #include <vector>
 #include "scan_line_t.hpp"
 
-namespace SLAM
-{
-namespace LCM
-{
 
 class slam_pc_t
 {
@@ -24,7 +20,7 @@ class slam_pc_t
 
         int32_t    num_scans;
 
-        std::vector< SLAM::LCM::scan_line_t > cloud;
+        std::vector< scan_line_t > cloud;
 
     public:
         /**
@@ -175,13 +171,9 @@ int64_t slam_pc_t::_computeHash(const __lcm_hash_ptr *p)
     const __lcm_hash_ptr cp = { p, (void*)slam_pc_t::getHash };
 
     int64_t hash = 0xeeecc32c1610686aLL +
-         SLAM::LCM::scan_line_t::_computeHash(&cp);
+         scan_line_t::_computeHash(&cp);
 
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
 }
 
 #endif

@@ -4,7 +4,6 @@
 #include <iostream>
 
 using namespace std;
-using namespace SLAM::LCM;
 
 GridMap::GridMap() : 
   map(0,0),
@@ -66,7 +65,7 @@ void GridMap::resetMap()
 void GridMap::publishMap(int64_t utime, string channel) {
   // Copy map into an LCM object
   // along with all relevant data
-  SLAM::LCM::slam_map_t publish_map;
+  slam_map_t publish_map;
   publish_map.utime = utime;
   publish_map.map_size = map.size();
   publish_map.max_x = max_x;

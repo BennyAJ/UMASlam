@@ -6,16 +6,10 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __common_LCM_types_imu_t_hpp__
-#define __common_LCM_types_imu_t_hpp__
+#ifndef __imu_t_hpp__
+#define __imu_t_hpp__
 
 
-namespace common
-{
-namespace LCM
-{
-namespace types
-{
 
 class imu_t
 {
@@ -244,12 +238,6 @@ int64_t imu_t::_computeHash(const __lcm_hash_ptr *)
 {
     int64_t hash = 0xcdd22800de0148ebLL;
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
-}
-
 }
 
 #endif

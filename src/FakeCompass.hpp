@@ -13,9 +13,9 @@ public:
   double getNorthLocation();
   double getNorthLocation(double initial_theta);
 
-  void addGPS(const common::LCM::types::gps_t & gps_data);
+  void addGPS(const gps_t & gps_data);
 
-  void addFOG(const common::LCM::types::fog_t & fog_data);
+  void addFOG(const fog_t & fog_data);
 
   size_t getNumCoords() const 
   {

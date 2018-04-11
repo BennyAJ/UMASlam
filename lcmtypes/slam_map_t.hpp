@@ -6,15 +6,11 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __SLAM_LCM_slam_map_t_hpp__
-#define __SLAM_LCM_slam_map_t_hpp__
+#ifndef __slam_map_t_hpp__
+#define __slam_map_t_hpp__
 
 #include <vector>
 
-namespace SLAM
-{
-namespace LCM
-{
 
 class slam_map_t
 {
@@ -221,10 +217,6 @@ int64_t slam_map_t::_computeHash(const __lcm_hash_ptr *)
 {
     int64_t hash = 0x880b460cd66e4866LL;
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
 }
 
 #endif

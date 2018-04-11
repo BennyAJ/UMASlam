@@ -6,16 +6,12 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __SLAM_LCM_scan_line_t_hpp__
-#define __SLAM_LCM_scan_line_t_hpp__
+#ifndef __scan_line_t_hpp__
+#define __scan_line_t_hpp__
 
 #include <vector>
 #include "point3D_t.hpp"
 
-namespace SLAM
-{
-namespace LCM
-{
 
 class scan_line_t
 {
@@ -24,7 +20,7 @@ class scan_line_t
 
         int32_t    scan_size;
 
-        std::vector< SLAM::LCM::point3D_t > scan_line;
+        std::vector< point3D_t > scan_line;
 
         std::vector< int8_t > hit;
 
@@ -159,8 +155,8 @@ int scan_line_t::_decodeNoHash(const void *buf, int offset, int maxlen)
         if(tlen < 0) return tlen; else pos += tlen;
     }
 
-    this->hit.resize(this->scan_size);
     if(this->scan_size) {
+        this->hit.resize(this->scan_size);
         tlen = __int8_t_decode_array(buf, offset + pos, maxlen - pos, &this->hit[0], this->scan_size);
         if(tlen < 0) return tlen; else pos += tlen;
     }
@@ -189,13 +185,9 @@ int64_t scan_line_t::_computeHash(const __lcm_hash_ptr *p)
     const __lcm_hash_ptr cp = { p, (void*)scan_line_t::getHash };
 
     int64_t hash = 0xc558f9306aa44b9dLL +
-         SLAM::LCM::point3D_t::_computeHash(&cp);
+         point3D_t::_computeHash(&cp);
 
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
 }
 
 #endif

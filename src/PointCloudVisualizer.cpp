@@ -2,7 +2,6 @@
 #include "Constants.hpp"
 
 using namespace std;
-using namespace SLAM::LCM;
 
 void PointCloudVisualizer::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
                       const string & chan,

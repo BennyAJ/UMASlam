@@ -6,40 +6,27 @@
 
 #include <lcm/lcm_coretypes.h>
 
-#ifndef __common_LCM_types_laser_t_hpp__
-#define __common_LCM_types_laser_t_hpp__
+#ifndef __laser_t_hpp__
+#define __laser_t_hpp__
 
 #include <vector>
 
-namespace common
-{
-namespace LCM
-{
-namespace types
-{
 
 class laser_t
 {
     public:
         int64_t    utime;
 
-        /// range data (meters)
         int32_t    nranges;
 
         std::vector< float > ranges;
 
-        /// intensity data, in sensor-specific units
         int32_t    nintensities;
 
         std::vector< float > intensities;
 
-        /**
-         * the angle (in radians) to the first point in nranges,
-         * relative to the laser scanner's own coordinate frame.
-         */
         float      rad0;
 
-        /// the number of radians between each successive sample
         float      radstep;
 
     public:
@@ -176,8 +163,8 @@ int laser_t::_decodeNoHash(const void *buf, int offset, int maxlen)
     tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->nranges, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    this->ranges.resize(this->nranges);
     if(this->nranges) {
+        this->ranges.resize(this->nranges);
         tlen = __float_decode_array(buf, offset + pos, maxlen - pos, &this->ranges[0], this->nranges);
         if(tlen < 0) return tlen; else pos += tlen;
     }
@@ -185,8 +172,8 @@ int laser_t::_decodeNoHash(const void *buf, int offset, int maxlen)
     tlen = __int32_t_decode_array(buf, offset + pos, maxlen - pos, &this->nintensities, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    this->intensities.resize(this->nintensities);
     if(this->nintensities) {
+        this->intensities.resize(this->nintensities);
         tlen = __float_decode_array(buf, offset + pos, maxlen - pos, &this->intensities[0], this->nintensities);
         if(tlen < 0) return tlen; else pos += tlen;
     }
@@ -217,12 +204,6 @@ int64_t laser_t::_computeHash(const __lcm_hash_ptr *)
 {
     int64_t hash = 0xf1e8ba118c05af46LL;
     return (hash<<1) + ((hash>>63)&1);
-}
-
-}
-
-}
-
 }
 
 #endif

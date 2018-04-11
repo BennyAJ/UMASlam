@@ -8,7 +8,7 @@
 #include <string>
 #include <iostream>
 #include "../lcmtypes/laser_t.hpp"
-#include "../lcmtypes/state_t.hpp"
+#include "../lcmtypes/slam_state_t.hpp"
 #include "../lcmtypes/slam_pc_t.hpp"
 
 struct GridUpdate
@@ -24,15 +24,15 @@ public:
 
   void handlePointCloud(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan,
-              const SLAM::LCM::slam_pc_t * pc);
+              const slam_pc_t * pc);
 
   void handleState(const lcm::ReceiveBuffer * rbuf,
            const std::string & chan,
-           const common::LCM::types::state_t * state);
+           const slam_state_t * state);
 
-  void addToMap(const SLAM::LCM::slam_pc_t & pc);
+  void addToMap(const slam_pc_t & pc);
 
-  void addPointToMap(const SLAM::Pose & curr_pose, const SLAM::LCM::point3D_t & local_coords_end_point, int8_t hit);
+  void addPointToMap(const SLAM::Pose & curr_pose, const point3D_t & local_coords_end_point, int8_t hit);
 
   GridMap getMapCopy() const;
 

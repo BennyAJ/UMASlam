@@ -5,8 +5,6 @@
 #include <cmath>
 
 using namespace std;
-using namespace common::LCM::types;
-using namespace SLAM::LCM;
 
 Slam::Slam() : mapper(MIN_X, MAX_X, MIN_Y, MAX_Y, SQUARE_SIZE),
          localizer(NUM_PARTICLES, PERCENT_PREDICTION_PARTICLES),
@@ -45,6 +43,9 @@ void Slam::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
     mapper.handlePointCloud(rbuf, chan, pc);
     localizer.updateMap(mapper.getMap());
   }
+
+  // Publish the updated map
+  mapper.publishMap();
 
   #ifdef PROFILE
   if(num_mapped_scans >= NUM_ONLY_MAP_SCANS)
@@ -135,13 +136,6 @@ void Slam::handleIMUData(const lcm::ReceiveBuffer * rbuf,
   localizer.handleIMUData(rbuf, chan, imu_data);
 }
 
-void Slam::handleState(const lcm::ReceiveBuffer * rbuf,
-             const string & chan,
-             const state_t * state)
-{
-  //not implemented, may not be needed
-}
-
 const GridMap& Slam::getMap() 
 {
   std::lock_guard<std::mutex> map_lock(map_mut);
@@ -156,7 +150,6 @@ void Slam::run()
     //lock the map to avoid rewriting of the map while it's publishing
     {
       std::lock_guard<std::mutex> map_lock(map_mut);
-      mapper.publishMap();
     }
     //map_lock releases after the publish
 

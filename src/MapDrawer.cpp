@@ -7,7 +7,6 @@
 #define WINDOW_WIDTH 1200.0f
 
 using namespace std;
-using namespace common::LCM::types;
 
 void MapDrawer::startDrawThread()
 {
@@ -140,7 +139,7 @@ pair<double, double> MapDrawer::convertToPixelCoords(double x, double y)
   return pair<double, double>(x,y);
 }
 
-void MapDrawer::handleState(const lcm::ReceiveBuffer * rbuf, const string & chan, const state_t * state)
+void MapDrawer::handleState(const lcm::ReceiveBuffer * rbuf, const string & chan, const slam_state_t * state)
 {
   SLAM::Pose p;
   p.x = state->x;
@@ -149,7 +148,7 @@ void MapDrawer::handleState(const lcm::ReceiveBuffer * rbuf, const string & chan
   addPose(p, chan);
 }
 
-void MapDrawer::handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const SLAM::LCM::slam_map_t * slam_map) {
+void MapDrawer::handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const slam_map_t * slam_map) {
   GridMap gridmap(slam_map->min_x, slam_map->max_x, slam_map->min_y, slam_map->max_y, slam_map->square_size_meters, slam_map->map);
   map = gridmap; 
 }

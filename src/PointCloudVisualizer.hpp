@@ -7,12 +7,12 @@ class PointCloudVisualizer
 public:
   void handlePointCloud(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan,
-              const SLAM::LCM::slam_pc_t * pc);
+              const slam_pc_t * pc);
 
   void drawCloud(sf::RenderWindow & win);
 
   void run();
 
 private:
-  SLAM::LCM::slam_pc_t cloud;
+  slam_pc_t cloud;
 };

@@ -1,6 +1,6 @@
 #include "Localizer.hpp"
 #include "Constants.hpp"
-#include "../lcmtypes/state_t.hpp"
+#include "../lcmtypes/slam_state_t.hpp"
 #include "Utilities.hpp"
 #include "../lcmtypes/particles_t.hpp"
 #include <queue>
@@ -9,8 +9,6 @@
 #include <iostream>
 
 using namespace std;
-using namespace common::LCM::types;
-using namespace SLAM::LCM;
 
 Particle::Particle() : x(0), y(0), theta(0), likelihood(0)
 {
@@ -63,7 +61,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
 
     weightParticles(nullptr);
 
-    state_t gps_pub_state;
+    slam_state_t gps_pub_state;
     gps_pub_state.utime = last_pose.utime;
     gps_pub_state.x = last_coord.first;
     gps_pub_state.y = last_coord.second;
@@ -76,7 +74,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
 
   if(chan == PERFECT_GPS_CHANNEL) {
     std::pair<double, double> last_perfect_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
-    state_t gps_pub_state;
+    slam_state_t gps_pub_state;
     gps_pub_state.utime = last_pose.utime;
     gps_pub_state.x = last_perfect_coord.first;
     gps_pub_state.y = last_perfect_coord.second;
@@ -363,13 +361,13 @@ void Localizer::setPose(int64_t utime)
 
 void Localizer::publishPose() const
 {
-  state_t pub_state;
+  slam_state_t pub_state;
   pub_state.utime = last_pose.utime;
   pub_state.x = last_pose.x;
   pub_state.y = last_pose.y;
   pub_state.yaw = last_pose.theta;
-  pub_state.origLat = coord_transformer.getOriginLat();
-  pub_state.origLon = coord_transformer.getOriginLon();
+  pub_state.lat_origin = coord_transformer.getOriginLat();
+  pub_state.lon_origin = coord_transformer.getOriginLon();
   lcm::LCM l;
   l.publish(SLAM_STATE_CHANNEL, &pub_state);
 }

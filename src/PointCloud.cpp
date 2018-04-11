@@ -4,8 +4,6 @@
 #include <cmath>
 
 using namespace std;
-using namespace common::LCM::types;
-using namespace SLAM::LCM;
 
 PointCloudMaker::PointCloudMaker() :
   scans(0),
