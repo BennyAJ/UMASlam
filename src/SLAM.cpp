@@ -124,8 +124,6 @@ void Slam::handleIMUData(const lcm::ReceiveBuffer * rbuf,
 						 const string & chan,
 						 const imu_t * imu_data)
 {
-  //cout << "HANDLE IMU" << endl;
-  //cout << "SETTING IMU NORTH TO " << imu_data->yaw << endl;
   imu_north = 2 * M_PI - imu_data->yaw + M_PI / 2;
 
   while(imu_north < 0)

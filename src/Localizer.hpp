@@ -58,7 +58,6 @@ public:
   void handlePointCloud(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan,
               const slam_pc_t * pc);
-
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan, 
               const common::LCM::types::imu_t * imu_data);
