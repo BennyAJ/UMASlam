@@ -12,7 +12,6 @@
 #define WAYPOINT_CHANNEL "CONTROLLER_WAYPOINT"
 #define SERVO_CHANNEL "SENSOR_LASER_SERVO"
 #define SLAM_STATE_CHANNEL "SLAM_STATE"
-#define SLAM_RESET_CHANNEL "SLAM_RESET"
 #define SLAM_MAP_CHANNEL "SLAM_MAP"
 #define SLAM_PC_MAP_CHANNEL "SLAM_PC_MAP"
 #define SLAM_POINT_CLOUD_CHANNEL "SLAM_POINT_CLOUD"
@@ -24,6 +23,7 @@
 
 // IMU stuff
 #define USE_IMU_PREDICTION 0
+#define GPS_STATE_CHANNEL "GPS_STATE"
 
 //set to a higher number to print more debug logs
 #define SLAM_DEBUG_LEVEL 0
@@ -64,7 +64,8 @@ const static int MINIMUM_LIDAR_HITS_TO_WEIGHT = 100;
 
 //GPS related localization coefficients
 //unit is meters
-//Data sheet values 1.5
+//Data sheet says less than 3 meters 95% of the time
+//So standard deviation must be 1.5 if GPS output is appx. normal
 const static double DEFAULT_GPS_SIGMA = 1.5;
 
 //FOG related localization coefficients
@@ -79,7 +80,7 @@ const static double Y_PREDICTION_SIGMA = 0.1;
 
 //Localization constants that relate the relative beliefs in the various sensors.
 //Magnitudes are irrelevant as long as the ratios are kept consistent
-const static double LASER_LIKELIHOOD_COEFFICIENT = 0.75;
+const static double LASER_LIKELIHOOD_COEFFICIENT = 0;
 const static double GPS_LIKELIHOOD_COEFFICIENT = 2.5;
 const static double FOG_LIKELIHOOD_COEFFICIENT = 1.0;
 
