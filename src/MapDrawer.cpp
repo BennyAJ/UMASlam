@@ -195,7 +195,9 @@ void MapDrawer::drawPoses(sf::RenderWindow & win)
   {
     pose_line.resize((unOrdMap[possibleChans[c].first]).size());
 
-    for(size_t i = 0; i < pose_line.getVertexCount(); i++)
+    // We check for both because it's possible for the size of the path vectors
+    // to change in the middle of this for loop
+    for(size_t i = 0; i < pose_line.getVertexCount() && i < unOrdMap[possibleChans[c].first].size(); i++)
     {
       SLAM::Pose p = unOrdMap[possibleChans[c].first][i];
       pair<double, double> coords = convertToPixelCoords(p.y, -p.x);
