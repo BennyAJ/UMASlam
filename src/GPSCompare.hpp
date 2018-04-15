@@ -1,5 +1,5 @@
-#ifndef __GPS_TRANSFORMER_HPP__
-#define __GPS_TRANSFORMER_HPP__
+#ifndef __GPS_COMPARE_HPP__
+#define __GPS_COMPARE_HPP__
 
 #include "../lcmtypes/gps_t.hpp"
 #include "../lcmtypes/state_t.hpp"
@@ -7,11 +7,11 @@
 #include "CoordTransformer.hpp"
 
 
-class GPSTransformer 
+class GPSCompare
 {
 
 public:
-	GPSTransformer() 
+	GPSCompare() 
 	: last_coord_perfect_gps{0, 0}, last_coord_gps{0, 0} { }
 
 	void handleGPS(const lcm::ReceiveBuffer * rbuf,
