@@ -14,17 +14,10 @@ void FOGCompare::handleFOG(const lcm::ReceiveBuffer * rbuf,
   if (chan == PERFECT_FOG_CHANNEL) 
   {
     last_perfect_fog_data = fog_data->data;
-
-    cout << "difference in data is 1: " << last_perfect_fog_data - last_fog_data << endl;
-    cout << "difference in data is 2: " << last_perfect_fog_data - last_fog_data << endl;
   }
   else if (chan == FOG_CHANNEL) 
   {
-
-    last_fog_data = fog_data->data;
-
-    cout << "difference in data is 3: " << last_perfect_fog_data - last_fog_data << endl;
-    cout << "difference in data is 4: " << last_perfect_fog_data - last_fog_data << endl;
+    cout << "difference in data is: " << last_perfect_fog_data - fog_data->data << endl;
   }
 }
 
