@@ -25,9 +25,6 @@ void GPSCompare::handleGPS(const lcm::ReceiveBuffer * rbuf,
   if (chan == PERFECT_GPS_CHANNEL) 
   {
     last_coord_perfect_gps = perfect_gps_transformer.transform(gps_data->latitude, gps_data->longitude);
-
-    cout << "difference in x is " << last_coord_perfect_gps.first - last_coord_gps.first << endl;
-    cout << "difference in y is " << last_coord_perfect_gps.second - last_coord_gps.second << endl;
   }
   else if (chan == GPS_CHANNEL) 
   {
