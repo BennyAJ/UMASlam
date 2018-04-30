@@ -56,7 +56,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
   }
 
   last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
-  //weightParticles(nullptr);
+  weightParticles(nullptr);
 
   state_t gps_pub_state;
   gps_pub_state.utime = last_pose.utime;
@@ -112,7 +112,7 @@ void Localizer::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
                  const slam_pc_t * pc)
 {
   current_utime = pc->utime;
-  weightParticles(pc);
+  //weightParticles(pc);
 }
 
 void Localizer::updateInternals(int64_t utime)

@@ -11,8 +11,10 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
                     const imu_t * imu_data)
 {
   publish_imu.utime = imu_data->utime;
-  publish_imu.udot = cos(last_yaw) * imu_data->udot + sin(last_yaw) * imu_data->vdot;
-  publish_imu.vdot = cos(last_yaw) * imu_data->vdot + sin(last_yaw) * imu_data->udot;
+  // new_x = cos(theta) * old_x - sin(theta) * old_y
+  publish_imu.vdot = cos(last_yaw) * imu_data->vdot - sin(last_yaw) * imu_data->udot;
+  // new_y = sin(theta) * old_x + cos(theta) * old_y
+  publish_imu.udot = sin(last_yaw) * imu_data->vdot + cos(last_yaw) * imu_data->udot;
 
   lcm.publish(TRANSFORMED_IMU_CHANNEL, &publish_imu);
 }
@@ -27,7 +29,7 @@ void IMUTransformer::handleSLAMState(const lcm::ReceiveBuffer * rbuf,
 int main() {
   IMUTransformer imuTransformer;
   lcm::LCM lcm;
-  lcm.subscribe(IMU_CHANNEL, &IMUTransformer::handleIMU, &imuTransformer);
+  lcm.subscribe(PERFECT_IMU_CHANNEL, &IMUTransformer::handleIMU, &imuTransformer);
   lcm.subscribe(SLAM_STATE_CHANNEL, &IMUTransformer::handleSLAMState, &imuTransformer);
 
   while(1) {

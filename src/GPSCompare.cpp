@@ -21,7 +21,6 @@ void GPSCompare::handleGPS(const lcm::ReceiveBuffer * rbuf,
     gps_transformer.initialize(gps_data->latitude, gps_data->longitude);
   }
 
-
   if (chan == PERFECT_GPS_CHANNEL) 
   {
     last_coord_perfect_gps = perfect_gps_transformer.transform(gps_data->latitude, gps_data->longitude);
