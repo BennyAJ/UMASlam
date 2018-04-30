@@ -175,6 +175,7 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
       pair<double, double> coord3 = convertToPixelCoords(-forward_dy - forward_dx/2.0 + pose_y, 
           -1 * (-forward_dx  + forward_dy/2.0 + pose_x));
       
+      cout << "Coord 1: (" << coord1.first << ", " << coord1.second << ")" << endl;
       boat[0].position = sf::Vector2f(coord1.first, coord1.second);
       boat[0].color = sf::Color::Blue;
       boat[1].position = sf::Vector2f(coord2.first, coord2.second);

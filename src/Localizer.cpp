@@ -48,25 +48,34 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
                 const string & chan,
                 const gps_t * gps_data)
 {
-  current_utime = gps_data->utime;
-  //if not initialized, initialize the coordinate transformation
-  if(!coord_transformer.isInitialized())
-  {
-    coord_transformer.initialize(gps_data->latitude, gps_data->longitude);
+  if(chan == GPS_CHANNEL) {
+    current_utime = gps_data->utime;
+    //if not initialized, initialize the coordinate transformation
+    if(!coord_transformer.isInitialized())
+    {
+      coord_transformer.initialize(gps_data->latitude, gps_data->longitude);
+    }
+
+    last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
+
+    vel.x = (last_coord.first - previous_gen_coord.first);
+    vel.y = (last_coord.second - previous_gen_coord.second);
+
+    weightParticles(nullptr);
   }
 
-  last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
-  weightParticles(nullptr);
-
-  state_t gps_pub_state;
-  gps_pub_state.utime = last_pose.utime;
-  gps_pub_state.x = last_coord.first;
-  gps_pub_state.y = last_coord.second;
-  gps_pub_state.yaw = last_theta;
-  gps_pub_state.origLat = coord_transformer.getOriginLat();
-  gps_pub_state.origLon = coord_transformer.getOriginLon();
-  lcm::LCM l;
-  l.publish(GPS_STATE_CHANNEL, &gps_pub_state);
+  if(chan == PERFECT_GPS_CHANNEL) {
+    std::pair<double, double> last_perfect_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
+    state_t gps_pub_state;
+    gps_pub_state.utime = last_pose.utime;
+    gps_pub_state.x = last_perfect_coord.first;
+    gps_pub_state.y = last_perfect_coord.second;
+    gps_pub_state.yaw = last_theta;
+    gps_pub_state.origLat = coord_transformer.getOriginLat();
+    gps_pub_state.origLon = coord_transformer.getOriginLon();
+    lcm::LCM l;
+    l.publish(GPS_STATE_CHANNEL, &gps_pub_state);
+  }
 }
 
 void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
@@ -304,6 +313,7 @@ void Localizer::setPose(int64_t utime)
   //move the particles into a vector for analysis
   //The double is the sum of the distances from each adjacent particle in the vector
   vector<pair<Particle, double> > averaging_particles(NUM_AVERAGE_PARTICLES);
+
   for(size_t i = 0; i < NUM_AVERAGE_PARTICLES && !part_queue.empty(); ++i)
   {
     averaging_particles[i].first = part_queue.top();

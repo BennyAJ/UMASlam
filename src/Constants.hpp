@@ -22,7 +22,7 @@
 #define PERFECT_FOG_CHANNEL "SENSOR_FOG_PERFECT"
 
 // IMU stuff
-#define USE_IMU_PREDICTION 0
+#define USE_IMU_PREDICTION 0 
 #define GPS_STATE_CHANNEL "GPS_STATE"
 
 //set to a higher number to print more debug logs

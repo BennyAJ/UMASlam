@@ -18,9 +18,10 @@ Slam::Slam() : mapper(MIN_X, MAX_X, MIN_Y, MAX_Y, SQUARE_SIZE),
 {
   llcm.subscribe(SLAM_POINT_CLOUD_CHANNEL, &Slam::handlePointCloud, this);
   llcm.subscribe(GPS_CHANNEL, &Slam::handleGPSData, this);
+  llcm.subscribe(PERFECT_GPS_CHANNEL, &Slam::handleGPSData, this);
   llcm.subscribe(FOG_CHANNEL, &Slam::handleFOGData, this);
   llcm.subscribe(COMPASS_CHANNEL, &Slam::handleCompassData, this);
-  llcm.subscribe(IMU_CHANNEL, &Slam::handleIMUData, this);
+  llcm.subscribe(TRANSFORMED_IMU_CHANNEL, &Slam::handleIMUData, this);
 }
 
 void Slam::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
