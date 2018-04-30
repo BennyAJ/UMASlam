@@ -11,13 +11,15 @@ void FOGCompare::handleFOG(const lcm::ReceiveBuffer * rbuf,
                     const fog_t * fog_data)
 {
 
-  if (chan == PERFECT_FOG_CHANNEL) 
+  if (chan == FOG_CHANNEL) 
   {
-    last_perfect_fog_data = fog_data->data;
+    cout << "FOG CHANNEL: " << fog_data->data << endl;
+    last_fog_data = fog_data->data;
   }
-  else if (chan == FOG_CHANNEL) 
+  else if (chan == PERFECT_FOG_CHANNEL) 
   {
-    cout << "difference in data is: " << last_perfect_fog_data - fog_data->data << endl;
+    cout << "PERFECT FOG CHANNEL: " << fog_data->data << endl;
+    cout << "difference is: " << last_fog_data - fog_data->data << endl;
   }
 }
 

@@ -13,13 +13,11 @@ void IMUCompare::handleIMU(const lcm::ReceiveBuffer * rbuf,
   if (chan == PERFECT_IMU_CHANNEL) 
   {
     last_perfect_imu_info = {imu_data->udot, imu_data->vdot};
-
-    cout << "difference in udot is: " << last_perfect_imu_info.first - last_imu_info.first << endl;
-    cout << "difference in vdot is: " << last_perfect_imu_info.second - last_imu_info.second << endl;
   }
   else if (chan == IMU_CHANNEL) 
   {
-    last_imu_info = {imu_data->udot, imu_data->vdot};
+    cout << "difference in udot is: " << last_perfect_imu_info.first - imu_data->udot << endl;
+    cout << "difference in vdot is: " << last_perfect_imu_info.second - imu_data->vdot << endl;
   }
 }
 

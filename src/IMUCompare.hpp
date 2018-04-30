@@ -11,7 +11,7 @@ class IMUCompare
 
 public:
 	IMUCompare() 
-	: last_perfect_imu_info{0, 0}, last_imu_info{0, 0} { }
+	: last_perfect_imu_info{0, 0} { }
 
 	void handleIMU(const lcm::ReceiveBuffer * rbuf,
 						 const std::string & chan,
@@ -20,7 +20,6 @@ public:
 private:
   // first double is udot and second is vdot
   std::pair<double, double> last_perfect_imu_info;
-  std::pair<double, double> last_imu_info;
   common::LCM::types::imu_t perfect_imu;
   common::LCM::types::imu_t imu;
   lcm::LCM lcm;
