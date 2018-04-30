@@ -87,7 +87,14 @@ void Slam::handleGPSData(const lcm::ReceiveBuffer * rbuf,
   if(!reinitialized_fog)
   {
     fake_compass.addGPS(*gps_data);
-    if(!USE_FAKE_COMPASS || compass_north != COMPASS_DEFAULT) 
+    if(NORTH_IS_ZERO) {
+      reinitialized_fog = true;
+      mapper.reset();
+      localizer.reset();
+      localizer.reinitializeFOG(0);
+      localizer.updateMap(mapper.getMap());
+    }
+    else if(!USE_FAKE_COMPASS || compass_north != COMPASS_DEFAULT) 
     {
       // Use compass to initialize north
       reinitialized_fog = true;
@@ -95,11 +102,10 @@ void Slam::handleGPSData(const lcm::ReceiveBuffer * rbuf,
       localizer.reset();
       localizer.reinitializeFOG(compass_north);
       localizer.updateMap(mapper.getMap());
-      
     }
     // Fall back to fake compass if compass is unavailable or 
     // priority is set to fake compass
-    else  
+    else 
     {
       if(fake_compass.getDistFromOrigin() > ORIGIN_DIST_BEFORE_REINITIALIZATION)
       {

@@ -20,6 +20,7 @@ int main(int argc, char ** argv)
     lcm::LCM l;
     l.subscribe(SLAM_STATE_CHANNEL, &MapDrawer::handleState, &drawer);
     l.subscribe(GPS_STATE_CHANNEL, &MapDrawer::handleState, &drawer);
+    l.subscribe(PERFECT_GPS_STATE_CHANNEL, &MapDrawer::handleState, &drawer);
     l.subscribe(SLAM_MAP_CHANNEL, &MapDrawer::handleMap, &drawer);
     drawer.startDrawThread();
     cout << "started draw thread" << endl;
