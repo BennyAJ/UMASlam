@@ -166,11 +166,10 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
       double pose_y = -unOrdMap[possibleChans[i].first].back().x;
 
       // We need to rotate everything by 90 degrees to get the map to draw
-      // with north facing upwards. That's why we flip X and Y and alter our
-      // rotation by 90 degrees
+      // with north facing upwards. That's why we flip X and Y
       pair<double, double> pix_coord = convertToPixelCoords(pose_x, pose_y);
       sf::Transform rotation;
-      rotation.rotate(unOrdMap[possibleChans[i].first].back().theta * (180/M_PI) - 90, pix_coord.first, pix_coord.second);
+      rotation.rotate(unOrdMap[possibleChans[i].first].back().theta * (180/M_PI), pix_coord.first, pix_coord.second);
       
       boat[0].position = sf::Vector2f(pix_coord.first + 7, pix_coord.second + 7);
       boat[0].position = rotation.transformPoint(boat[0].position);

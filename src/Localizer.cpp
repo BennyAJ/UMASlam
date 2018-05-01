@@ -58,7 +58,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
   vel.x = (last_coord.first - previous_gen_coord.first);
   vel.y = (last_coord.second - previous_gen_coord.second);
 
-  weightParticles(nullptr);
+  //weightParticles(nullptr);
 }
 
 void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
@@ -104,7 +104,7 @@ void Localizer::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
                  const slam_pc_t * pc)
 {
   current_utime = pc->utime;
-  //weightParticles(pc);
+  weightParticles(pc);
 }
 
 void Localizer::updateInternals(int64_t utime)

@@ -75,14 +75,14 @@ const static double DEFAULT_GPS_SIGMA = 1.5;
 const static double DEFAULT_FOG_SIGMA = 0.5*M_PI/180.0;
 
 //Localization coefficients related to predicting particles forward with gps
-const static double PERCENT_PREDICTION_PARTICLES = 1;
+const static double PERCENT_PREDICTION_PARTICLES = 0;
 const static double X_PREDICTION_SIGMA = 0.1;
 const static double Y_PREDICTION_SIGMA = 0.1;
 
 //Localization constants that relate the relative beliefs in the various sensors.
 //Magnitudes are irrelevant as long as the ratios are kept consistent
-const static double LASER_LIKELIHOOD_COEFFICIENT = 0;
-const static double GPS_LIKELIHOOD_COEFFICIENT = 1.0;
+const static double LASER_LIKELIHOOD_COEFFICIENT = 1.5;
+const static double GPS_LIKELIHOOD_COEFFICIENT = 2.5;
 const static double FOG_LIKELIHOOD_COEFFICIENT = 1.0;
 
 // Default value for unused parts of the map
