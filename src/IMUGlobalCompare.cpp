@@ -4,7 +4,6 @@
 #include <cmath>
 
 using namespace std;
-using namespace common::LCM::types;
 
 void IMUGlobalCompare::handleIMU(const lcm::ReceiveBuffer * rbuf,
                     const string & chan,

@@ -2,7 +2,6 @@
 #define __IMU_COMPARE_HPP__
 
 #include "../lcmtypes/imu_t.hpp"
-#include "../lcmtypes/state_t.hpp"
 #include <lcm/lcm-cpp.hpp>
 
 
@@ -15,7 +14,7 @@ public:
 
 	void handleIMU(const lcm::ReceiveBuffer * rbuf,
 						 const std::string & chan,
-						 const common::LCM::types::imu_t * imu_data);
+						 const imu_t * imu_data);
 
 private:
   std::pair<double, double> last_sim_imu_info;

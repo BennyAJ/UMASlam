@@ -49,7 +49,7 @@ public:
 
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const common::LCM::types::imu_t * imu_data);
+             const imu_t * imu_data);
 
   const GridMap& getMap();
 

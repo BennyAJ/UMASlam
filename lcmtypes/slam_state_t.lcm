@@ -9,11 +9,9 @@ struct slam_state_t {
 	double yaw;
 
   // north angle that FOG is initialized to in radians
-  boolean north_initialized;
   double north_angle;
 
   // latitude and longitude that the SLAM map is initialized with
-  boolean lat_lon_initialized;
 	double lat_origin;
 	double lon_origin;
 }

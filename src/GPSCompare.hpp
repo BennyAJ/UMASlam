@@ -2,7 +2,6 @@
 #define __GPS_COMPARE_HPP__
 
 #include "../lcmtypes/gps_t.hpp"
-#include "../lcmtypes/state_t.hpp"
 #include <lcm/lcm-cpp.hpp>
 #include "CoordTransformer.hpp"
 
@@ -16,13 +15,13 @@ public:
 
 	void handleGPS(const lcm::ReceiveBuffer * rbuf,
 						 const std::string & chan,
-						 const common::LCM::types::gps_t * gps_data);
+						 const gps_t * gps_data);
 
 private:
   std::pair<double, double> last_coord_perfect_gps;
   std::pair<double, double> last_coord_gps;
-  common::LCM::types::gps_t perfect_gps;
-  common::LCM::types::gps_t gps;
+  gps_t perfect_gps;
+  gps_t gps;
   CoordTransformer perfect_gps_transformer;
   CoordTransformer gps_transformer;
   lcm::LCM lcm;

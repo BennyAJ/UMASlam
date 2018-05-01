@@ -22,11 +22,7 @@ class slam_state_t
 
         double     yaw;
 
-        int8_t     north_initialized;
-
         double     north_angle;
-
-        int8_t     lat_lon_initialized;
 
         double     lat_origin;
 
@@ -140,13 +136,7 @@ int slam_state_t::_encodeNoHash(void *buf, int offset, int maxlen) const
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->yaw, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __boolean_encode_array(buf, offset + pos, maxlen - pos, &this->north_initialized, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
-
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->north_angle, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
-
-    tlen = __boolean_encode_array(buf, offset + pos, maxlen - pos, &this->lat_lon_initialized, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->lat_origin, 1);
@@ -174,13 +164,7 @@ int slam_state_t::_decodeNoHash(const void *buf, int offset, int maxlen)
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->yaw, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __boolean_decode_array(buf, offset + pos, maxlen - pos, &this->north_initialized, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
-
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->north_angle, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
-
-    tlen = __boolean_decode_array(buf, offset + pos, maxlen - pos, &this->lat_lon_initialized, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->lat_origin, 1);
@@ -199,9 +183,7 @@ int slam_state_t::_getEncodedSizeNoHash() const
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
-    enc_size += __boolean_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
-    enc_size += __boolean_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
     return enc_size;
@@ -209,7 +191,7 @@ int slam_state_t::_getEncodedSizeNoHash() const
 
 int64_t slam_state_t::_computeHash(const __lcm_hash_ptr *)
 {
-    int64_t hash = 0x72b5afc368dd88daLL;
+    int64_t hash = 0xbb7466f05ed13024LL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

@@ -60,7 +60,7 @@ public:
               const slam_pc_t * pc);
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan, 
-              const common::LCM::types::imu_t * imu_data);
+              const imu_t * imu_data);
 
   SLAM::Pose getPose() const;
 
@@ -113,7 +113,7 @@ private:
   int64_t current_utime;
 
   Velocity vel;
-  common::LCM::types::imu_t last_imu_data;
+  imu_t last_imu_data;
 
 };
 

@@ -46,44 +46,19 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
                 const string & chan,
                 const gps_t * gps_data)
 {
-  if(chan == GPS_CHANNEL) {
-    current_utime = gps_data->utime;
-    //if not initialized, initialize the coordinate transformation
-    if(!coord_transformer.isInitialized())
-    {
-      coord_transformer.initialize(gps_data->latitude, gps_data->longitude);
-    }
-
-    last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
-
-    vel.x = (last_coord.first - previous_gen_coord.first);
-    vel.y = (last_coord.second - previous_gen_coord.second);
-
-    weightParticles(nullptr);
-
-    slam_state_t gps_pub_state;
-    gps_pub_state.utime = last_pose.utime;
-    gps_pub_state.x = last_coord.first;
-    gps_pub_state.y = last_coord.second;
-    gps_pub_state.yaw = last_theta;
-    gps_pub_state.origLat = coord_transformer.getOriginLat();
-    gps_pub_state.origLon = coord_transformer.getOriginLon();
-    lcm::LCM l;
-    l.publish(PERFECT_GPS_STATE_CHANNEL, &gps_pub_state);
+  current_utime = gps_data->utime;
+  //if not initialized, initialize the coordinate transformation
+  if(!coord_transformer.isInitialized())
+  {
+    coord_transformer.initialize(gps_data->latitude, gps_data->longitude);
   }
 
-  if(chan == PERFECT_GPS_CHANNEL) {
-    std::pair<double, double> last_perfect_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
-    slam_state_t gps_pub_state;
-    gps_pub_state.utime = last_pose.utime;
-    gps_pub_state.x = last_perfect_coord.first;
-    gps_pub_state.y = last_perfect_coord.second;
-    gps_pub_state.yaw = last_theta;
-    gps_pub_state.origLat = coord_transformer.getOriginLat();
-    gps_pub_state.origLon = coord_transformer.getOriginLon();
-    lcm::LCM l;
-    l.publish(GPS_STATE_CHANNEL, &gps_pub_state);
-  }
+  last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
+
+  vel.x = (last_coord.first - previous_gen_coord.first);
+  vel.y = (last_coord.second - previous_gen_coord.second);
+
+  weightParticles(nullptr);
 }
 
 void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
@@ -366,6 +341,7 @@ void Localizer::publishPose() const
   pub_state.x = last_pose.x;
   pub_state.y = last_pose.y;
   pub_state.yaw = last_pose.theta;
+  pub_state.north_angle = last_theta;
   pub_state.lat_origin = coord_transformer.getOriginLat();
   pub_state.lon_origin = coord_transformer.getOriginLon();
   lcm::LCM l;
