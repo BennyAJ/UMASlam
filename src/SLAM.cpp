@@ -117,6 +117,9 @@ void Slam::handleGPSData(const lcm::ReceiveBuffer * rbuf,
       }
     }
   }
+
+  // Publish the updated map
+  mapper.publishMap();
 }
 
 void Slam::handleIMUData(const lcm::ReceiveBuffer * rbuf,

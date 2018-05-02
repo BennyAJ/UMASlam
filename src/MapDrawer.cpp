@@ -161,7 +161,6 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
   boat.resize(3);
   for(size_t i = 0; i < possibleChans.size(); i++) {
     if(!unOrdMap[possibleChans[i].first].empty()) {
-
       double pose_x = unOrdMap[possibleChans[i].first].back().y;
       double pose_y = -unOrdMap[possibleChans[i].first].back().x;
 

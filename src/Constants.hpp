@@ -110,7 +110,7 @@ static const double LIDAR_HEIGHT = 0.15;
 //FakeCompass' distance function
 //NORTH_IS_ZERO is used to avoid initialization issues when using the simulator.
 //If it's enabled, we ignore all other compasses
-#define NORTH_IS_ZERO false 
+#define NORTH_IS_ZERO true 
 #define USE_FAKE_COMPASS true
 #define ORIGIN_DIST_BEFORE_REINITIALIZATION 5
 
