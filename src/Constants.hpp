@@ -72,7 +72,8 @@ const static double DEFAULT_GPS_SIGMA = 1.5;
 //FOG related localization coefficients
 //unit is radians
 //Data sheet value 0.5
-const static double DEFAULT_FOG_SIGMA = 0.5*M_PI/180.0;
+// IMU DATA SHEET SAYS 1.0 WHILE MOVING
+const static double DEFAULT_FOG_SIGMA = 1*M_PI/180.0;
 
 //Localization coefficients related to predicting particles forward with gps
 const static double PERCENT_PREDICTION_PARTICLES = 1;
@@ -110,8 +111,8 @@ static const double LIDAR_HEIGHT = 0.15;
 //FakeCompass' distance function
 //NORTH_IS_ZERO is used to avoid initialization issues when using the simulator.
 //If it's enabled, we ignore all other compasses
-#define NORTH_IS_ZERO false 
-#define USE_FAKE_COMPASS true
+#define NORTH_IS_ZERO true 
+#define USE_FAKE_COMPASS false 
 #define ORIGIN_DIST_BEFORE_REINITIALIZATION 5
 
 //default value for the north value given from compass

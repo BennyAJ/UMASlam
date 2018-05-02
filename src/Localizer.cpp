@@ -92,14 +92,14 @@ void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
                 const string & chan,
                 const fog_t * fog_data)
 {
-  current_utime = fog_data->utime;
+  /*current_utime = fog_data->utime;
   if(!fog_initialized)
   {
     initial_theta = DEG_TO_RAD(fog_data->data);
     fog_initialized = true;
   }
 
-  last_theta = (DEG_TO_RAD(fog_data->data) - initial_theta);
+  last_theta = (DEG_TO_RAD(fog_data->data) - initial_theta);*/
   //weightParticles(nullptr);
 }
 
@@ -107,6 +107,17 @@ void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
                 const std::string & chan, 
                 const imu_t * imu_data) 
 {
+  current_utime = imu_data->utime;
+  if(!fog_initialized)
+  {
+    // IMU always gives heading relative to north,
+    // so just set this to 0 as a hack
+    initial_theta = 0;
+    fog_initialized = true;
+  }
+
+  last_theta = (DEG_TO_RAD(imu_data->yaw) - initial_theta);
+
   double last_x_accel = last_imu_data.vdot;
   double last_y_accel = last_imu_data.udot;
  
