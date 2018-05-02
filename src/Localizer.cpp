@@ -46,8 +46,10 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
 
   last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
 
-  vel.x = (last_coord.first - previous_gen_coord.first);
-  vel.y = (last_coord.second - previous_gen_coord.second);
+  if(RESET_VELOCITY_WITH_GPS) {
+    vel.x = (last_coord.first - previous_gen_coord.first);
+    vel.y = (last_coord.second - previous_gen_coord.second);
+  }
 
   weightParticles();
 }
@@ -85,6 +87,9 @@ void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
   // Trapezoidal Riemann sum between last two accelerations to find velocity
   vel.x += time_diff * ((last_x_accel + x_accel) / 2);
   vel.y += time_diff * ((last_y_accel + y_accel) / 2);
+
+  cout << "Current X Velocity: " << vel.x << endl;
+  cout << "Current Y Velocity: " << vel.y << endl;
  
   last_imu_data = *imu_data;
 }

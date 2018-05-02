@@ -30,7 +30,7 @@ int main() {
   IMUTransformer imuTransformer;
   lcm::LCM lcm;
   lcm.subscribe(PERFECT_IMU_CHANNEL, &IMUTransformer::handleIMU, &imuTransformer);
-  lcm.subscribe(SLAM_STATE_CHANNEL, &IMUTransformer::handleSLAMState, &imuTransformer);
+  lcm.subscribe(PERFECT_SLAM_STATE_CHANNEL, &IMUTransformer::handleSLAMState, &imuTransformer);
 
   while(1) {
     lcm.handle();

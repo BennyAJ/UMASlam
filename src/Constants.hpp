@@ -32,7 +32,8 @@ const static double DEFAULT_GPS_SIGMA = 1.5;
 const static double DEFAULT_FOG_SIGMA = 0.5*M_PI/180.0;
 
 //IMU Related Constants
-#define USE_IMU_PREDICTION 0 
+#define USE_IMU_PREDICTION true 
+#define RESET_VELOCITY_WITH_GPS false 
 
 //Simulation Constants
 //When simulator is on, we always initialize north to 0 degrees
@@ -46,7 +47,7 @@ const static int NUM_AVERAGE_PARTICLES = 1;
 const static int NUM_PARTICLES = 1000;
 
 //Localization coefficients related to predicting particles forward with gps
-const static double PERCENT_PREDICTION_PARTICLES = 0;
+const static double PERCENT_PREDICTION_PARTICLES = 1;
 const static double X_PREDICTION_SIGMA = 0.1;
 const static double Y_PREDICTION_SIGMA = 0.1;
 
