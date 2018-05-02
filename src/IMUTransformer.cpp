@@ -11,7 +11,7 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
 {
   publish_imu.utime = imu_data->utime;
   // new_x = cos(theta) * old_x - sin(theta) * old_y
-  publish_imu.vdot = cos(last_yaw) * imu_data->vdot - sin(last_yaw) * imu_data->udot;
+  publish_imu.vdot = -1 * (cos(last_yaw) * imu_data->vdot - sin(last_yaw) * imu_data->udot);
   // new_y = sin(theta) * old_x + cos(theta) * old_y
   publish_imu.udot = sin(last_yaw) * imu_data->vdot + cos(last_yaw) * imu_data->udot;
 
