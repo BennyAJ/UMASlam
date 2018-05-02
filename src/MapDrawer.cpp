@@ -15,12 +15,6 @@ void MapDrawer::startDrawThread()
   draw_thread.detach();
 }
 
-void MapDrawer::switchMap(const GridMap& nmap)
-{
-  unique_lock<mutex> map_loc(map_mut);
-  map = nmap;
-}
-
 void MapDrawer::addPose(const SLAM::Pose& pose, string channel)
 {
   unOrdMap[channel].push_back(pose);
@@ -65,8 +59,7 @@ void MapDrawer::startDraw()
     }
 
     //clear the window
-    window.clear(sf::Color::White);
-    drawMap(window);
+    window.clear(sf::Color(128, 128, 128));
     drawPoses(window);
     drawBoat(window);
 
@@ -76,61 +69,12 @@ void MapDrawer::startDraw()
   }
 }
 
-void MapDrawer::drawMap(sf::RenderWindow & win)
-{
-  unique_lock<mutex> map_lock(map_mut);
-
-  size_t num_cols = map.getCellsPerRow();
-  if(num_cols == 0)
-  {
-    win.display();
-    return;
-  }
-
-  //calculate row and column for 0,0
-  size_t origin_loc = map.convertToGridCoords(0,0);
-  size_t origin_col =  origin_loc % num_cols;
-  size_t origin_row = origin_loc / num_cols;
-
-  sf::VertexArray grid;
-  grid.setPrimitiveType(sf::Quads);
-  grid.resize(map.getNumCells() * 4);
-  size_t row_num = 0;
-  size_t col_num = 0;
-  for(size_t i = 0; i < map.getNumCells(); ++i, ++col_num)
-  {
-    //greater than, or <=?
-    if(num_cols < col_num)
-    {
-      col_num -= num_cols;
-      ++row_num;
-    }
-    sf::Vertex * square = &grid[i*4];
-
-    int halfx = WINDOW_HEIGHT/2.0;
-    int halfy = WINDOW_WIDTH/2.0;
-    int min_x = halfx +(row_num - origin_row) * PIX_PER_SQUARE;
-    int min_y = halfy -(col_num - origin_col) * PIX_PER_SQUARE;
-
-    square[0].position = sf::Vector2f(min_x, min_y);
-    square[1].position = sf::Vector2f(min_x + PIX_PER_SQUARE, min_y);
-    square[2].position = sf::Vector2f(min_x + PIX_PER_SQUARE, min_y + PIX_PER_SQUARE);
-    square[3].position = sf::Vector2f(min_x, min_y + PIX_PER_SQUARE);
-
-    square[0].color = sf::Color(0,0,0, map[i]);
-    square[1].color = sf::Color(0,0,0, map[i]);
-    square[2].color = sf::Color(0,0,0, map[i]);
-    square[3].color = sf::Color(0,0,0, map[i]);
-  }
-  win.draw(grid);
-}
-
 pair<double, double> MapDrawer::convertToPixelCoords(double x, double y)
 {
   double origin_x = WINDOW_HEIGHT/2.0;
   double origin_y = WINDOW_WIDTH/2.0;
 
-  double pix_per_meter = static_cast<double>(PIX_PER_SQUARE)/map.getSquareSize();
+  double pix_per_meter = static_cast<double>(PIX_PER_SQUARE)/SQUARE_SIZE;
 
   x *= pix_per_meter;
   y *= pix_per_meter;
@@ -146,11 +90,6 @@ void MapDrawer::handleState(const lcm::ReceiveBuffer * rbuf, const string & chan
   p.y = state->y;
   p.theta = state->yaw;
   addPose(p, chan);
-}
-
-void MapDrawer::handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const slam_map_t * slam_map) {
-  GridMap gridmap(slam_map->min_x, slam_map->max_x, slam_map->min_y, slam_map->max_y, slam_map->square_size_meters, slam_map->map);
-  map = gridmap; 
 }
 
 void MapDrawer::drawBoat(sf::RenderWindow & win)

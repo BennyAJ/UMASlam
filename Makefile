@@ -9,7 +9,7 @@ OBJ_PATH = ./obj
 SRC_PATH = ./src
 TEST_PATH = ./unit_tests
 
-all: GridTest MapperTest Localizer Main PointCloudTest PointCloudPrinter ParticlePrinter PointCloudVis IMUTransformer GPSCompare IMUCompare FOGCompare IMUGlobalCompare
+all: Localizer Main ParticlePrinter IMUTransformer
 
 optimized: FLAGS += $(OPTIMIZATION_FLAGS)
 optimized: all
@@ -26,51 +26,18 @@ obj/%.o: $(SRC_PATH)/%.cpp
 obj/%.o: $(TEST_PATH)/%.cpp
 	$(CXX) $(FLAGS) -c  $^ -o $@
 
-obj/MapDrawer.o: $(SRC_PATH)/MapDrawer.cpp
-	$(CXX) $(FLAGS) $(SFML_FLAGS) -c $^ -o $@
-
 Localizer: $(OBJ_PATH)/Localizer.o
 
 SLAM: $(OBJ_PATH)/SLAM.o
 
-Main: $(OBJ_PATH)/SLAM.o $(OBJ_PATH)/Localizer.o $(OBJ_PATH)/MapDrawer.o $(OBJ_PATH)/Mapper.o $(OBJ_PATH)/GridMap.o $(OBJ_PATH)/Main.o $(OBJ_PATH)/CoordTransformer.o $(OBJ_PATH)/FakeCompass.o
+Main: $(OBJ_PATH)/SLAM.o $(OBJ_PATH)/Localizer.o $(OBJ_PATH)/MapDrawer.o $(OBJ_PATH)/Main.o $(OBJ_PATH)/CoordTransformer.o $(OBJ_PATH)/FakeCompass.o
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/SLAM $(SFML_FLAGS) $(LCM_FLAGS)
-
-MapperTest: $(OBJ_PATH)/Mapper.o $(OBJ_PATH)/MapDrawer.o $(OBJ_PATH)/MapperTester.o $(OBJ_PATH)/GridMap.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/MapperTest $(SFML_FLAGS) $(LCM_FLAGS)
-
-GridTest: $(OBJ_PATH)/GridMap.o $(OBJ_PATH)/GridTests.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/GridTest $(LCM_FLAGS)
-
-PointCloudTest: $(OBJ_PATH)/PointCloud.o $(OBJ_PATH)/point_cloud_test.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/PointCloudMaker $(LCM_FLAGS)
-
-PointCloudPrinter: $(OBJ_PATH)/PointCloudPrinter.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/PointCloudPrinter $(LCM_FLAGS)
-
-PointCloudVis: 
-	$(CXX) $(FLAGS) src/PointCloudVisualizer.cpp  -o $(BIN_PATH)/PointCloudVis $(LCM_FLAGS) $(SFML_FLAGS)
 
 ParticlePrinter: $(OBJ_PATH)/ParticlePrinter.o
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/ParticlePrinter $(LCM_FLAGS)
 
 IMUTransformer: $(OBJ_PATH)/IMUTransformer.o
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUTransformer $(LCM_FLAGS)
-
-GPSCompare: $(OBJ_PATH)/CoordTransformer.o $(OBJ_PATH)/GPSCompare.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/GPSCompare $(LCM_FLAGS)
-
-IMUCompare: $(OBJ_PATH)/IMUCompare.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUCompare $(LCM_FLAGS)
-
-FOGCompare: $(OBJ_PATH)/FOGCompare.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/FOGCompare $(LCM_FLAGS)
-
-IMUGlobalCompare: $(OBJ_PATH)/IMUGlobalCompare.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUGlobalCompare $(LCM_FLAGS)
-
-test: GridTest MapperTest
-	./bin/GridTest >/dev/null
 
 report:
 	$(MAKE) -C report 

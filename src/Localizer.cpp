@@ -14,32 +14,23 @@ Particle::Particle() : x(0), y(0), theta(0), likelihood(0)
 {
 }
 
-Localizer::Localizer(int num_particles, double predict_percent) : 
-  Localizer(num_particles, predict_percent, DEFAULT_GPS_SIGMA, DEFAULT_FOG_SIGMA)
-{
-}
-
-Localizer::Localizer(int num_particles, double predict_percent, double gps_sigma, double fog_sigma): 
+Localizer::Localizer(int num_particles, double predict_percent): 
   particles(num_particles),
-  gps_dist(0, gps_sigma),
-  theta_fog_dist(0, fog_sigma),
+  gps_dist(0, DEFAULT_GPS_SIGMA),
+  theta_fog_dist(0, DEFAULT_FOG_SIGMA),
   x_predict_dist(0, X_PREDICTION_SIGMA),
   y_predict_dist(0, Y_PREDICTION_SIGMA),
+  initial_theta(0),
   num_predict_particles(num_particles *predict_percent),
   last_utime(0),
-  fog_initialized(false),
-  current_utime(0)
+  current_utime(0),
+  fog_initialized(false)
 {
 }
 
 SLAM::Pose Localizer::getPose() const
 {
   return last_pose;
-}
-
-void Localizer::updateMap(const GridMap & new_map)
-{
-  map = new_map;
 }
 
 void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
@@ -58,7 +49,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
   vel.x = (last_coord.first - previous_gen_coord.first);
   vel.y = (last_coord.second - previous_gen_coord.second);
 
-  weightParticles(nullptr);
+  weightParticles();
 }
 
 void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
@@ -73,7 +64,6 @@ void Localizer::handleFOGData(const lcm::ReceiveBuffer * rbuf,
   }
 
   last_theta = (DEG_TO_RAD(fog_data->data) - initial_theta);
-  //weightParticles(nullptr);
 }
 
 void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
@@ -99,22 +89,13 @@ void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
   last_imu_data = *imu_data;
 }
 
-void Localizer::handlePointCloud(const lcm::ReceiveBuffer * rbuf,
-                 const string & chan,
-                 const slam_pc_t * pc)
-{
-  current_utime = pc->utime;
-  weightParticles(pc);
-}
-
 void Localizer::updateInternals(int64_t utime)
 {
   previous_gen_coord = last_coord;
   last_utime = utime;
 }
 
-// Passing in a nullptr will skip weighting with the point cloud
-void Localizer::weightParticles(const slam_pc_t * pc)
+void Localizer::weightParticles()
 {
   // Don't do anything until at least one FOG and GPS
   // measurement have been taken
@@ -130,9 +111,6 @@ void Localizer::weightParticles(const slam_pc_t * pc)
     // weight the Particles based on the sensor data
     weightParticlesWithGPS(last_coord);
     weightParticlesWithFOG(last_theta);
-    if(pc != nullptr) {
-      weightParticlesWithCloud(*pc);
-    }
 
     //set pose
     setPose(frozen_utime);
@@ -183,71 +161,6 @@ void Localizer::weightParticlesWithFOG(const double last_theta)
     //since the gaussian already makes them between 0 and 1
     //so just add it to the particle
     p.likelihood += fog_likelihood * FOG_LIKELIHOOD_COEFFICIENT;
-  }
-}
-
-void Localizer::weightParticlesWithCloud(const slam_pc_t & pc)
-{
-  vector<double> temp_likelihoods(particles.size(), 0);
-  size_t num_hits = 0;
-  for(size_t particle_num = 0; particle_num < particles.size(); ++particle_num)
-  {
-    Particle & p = particles[particle_num];
-    double curr_particle_likelihood = 0;
-    SLAM::Pose particle_pose(p.x, p.y,p.theta, 0);
-
-    //for each scan line and each end point do hit or miss
-    for(size_t i = 0; i < pc.cloud.size(); ++i)
-    {
-      for(size_t j = 0; j < pc.cloud[i].scan_line.size(); ++j)
-      {
-        if(pc.cloud[i].hit[j] == 0 )
-        {
-          continue;
-        }
-        num_hits++;
-        double x = pc.cloud[i].scan_line[j].x;
-        double y = pc.cloud[i].scan_line[j].y;
-        double z = pc.cloud[i].scan_line[j].z;
-        double angle = atan2(y,x);
-
-        if(abs(angle * 180.0/M_PI ) > LIDAR_MAP_RANGE_DEG)
-        {
-          continue;
-        }
-      
-        SLAM::rotateIntoGlobalCoordsInPlace(x,y,z, particle_pose);
-        
-        //just do simple hit or miss as lidar sigma < 30mm from data sheet
-        if(map.at(x, y) > HIT_THRESHOLD)//if the square is considered full, add to likelihood
-        { 
-          curr_particle_likelihood += HIT_LIKELIHOOD_INC_VALUE; 
-        }
-        else if(map.at(x,y) < MISS_THRESHOLD)
-        {
-          curr_particle_likelihood += MISS_LIKELIHOOD_DEC_VALUE;
-        }
-      }
-    }
-    if(num_hits<= MINIMUM_LIDAR_HITS_TO_WEIGHT)//if the scan is empty, exit early
-    {
-      return;
-    }
-    temp_likelihoods[particle_num] = curr_particle_likelihood;
-  }
-
-  // Point cloud is scanned once per particle, so divide by the number
-  // of particles to get the number of hits in a single point cloud
-  num_hits /= particles.size();
-
-  // Minimum and maximum likelihoods for a single point cloud
-  double min_laser_likelihood = MISS_LIKELIHOOD_DEC_VALUE * num_hits;
-  double max_laser_likelihood = HIT_LIKELIHOOD_INC_VALUE * num_hits;
-  boundLikelihoods(temp_likelihoods, min_laser_likelihood, max_laser_likelihood);
-
-  for(size_t i = 0; i < temp_likelihoods.size(); ++i)
-  {
-    particles[i].likelihood += temp_likelihoods[i] * LASER_LIKELIHOOD_COEFFICIENT;
   }
 }
 
@@ -464,12 +377,6 @@ void Localizer::reset()
 void Localizer::reinitializeFOG(double new_initial_fog)
 {
   initial_theta = new_initial_fog;
-
-  while(initial_theta < 0)
-    initial_theta += 2 * M_PI;
-  while(initial_theta > 2 * M_PI)
-    initial_theta -= 2 * M_PI;
-
   fog_initialized = true;
 }
 

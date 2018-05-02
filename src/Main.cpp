@@ -19,7 +19,6 @@ int main(int argc, char ** argv)
     MapDrawer drawer;
     lcm::LCM l;
     l.subscribe(SLAM_STATE_CHANNEL, &MapDrawer::handleState, &drawer);
-    l.subscribe(SLAM_MAP_CHANNEL, &MapDrawer::handleMap, &drawer);
     drawer.startDrawThread();
     cout << "started draw thread" << endl;
     while(1)

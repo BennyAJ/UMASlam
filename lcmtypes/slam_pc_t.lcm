@@ -1,6 +1,0 @@
-struct slam_pc_t
-{
-	int64_t utime;
-	int32_t num_scans;
-	scan_line_t cloud[num_scans];
-}

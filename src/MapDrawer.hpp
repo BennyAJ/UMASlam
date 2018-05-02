@@ -1,10 +1,8 @@
 #ifndef __UMA_MAP_DRAWER_HPP__
 #define __UMA_MAP_DRAWER_HPP__
 #include <unordered_map>
-#include "GridMap.hpp"
 #include "Constants.hpp"
 #include "../lcmtypes/slam_state_t.hpp"
-#include "../lcmtypes/slam_map_t.hpp"
 #include <SFML/Graphics.hpp>
 #include <lcm/lcm-cpp.hpp>
 #include <mutex>
@@ -24,21 +22,16 @@ public:
     possibleChans.push_back(std::pair<std::string,sf::Color> (SLAM_STATE_CHANNEL,sf::Color::Red));
   }
   void startDrawThread();
-  void switchMap(const GridMap& nmap);
   void addPose(const SLAM::Pose& pose, std::string channel);
   void startDraw();
-  void drawMap(sf::RenderWindow & win);
   void drawPoses(sf::RenderWindow & win);
   void drawBoat(sf::RenderWindow & win);
 
   void handleState(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const slam_state_t * state);
-  void handleMap(const lcm::ReceiveBuffer * rbuf, const std::string & chan, const slam_map_t * slam_map);
 
 private:
   std::pair<double, double> convertToPixelCoords(double x, double y);
 
-  std::mutex map_mut;
-  GridMap map;
   std::unordered_map<std::string,std::vector<SLAM::Pose>> unOrdMap;
   std::vector<std::pair<std::string,sf::Color>>possibleChans;
 };

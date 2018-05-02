@@ -4,8 +4,6 @@
 #include "../lcmtypes/gps_t.hpp"
 #include "../lcmtypes/fog_t.hpp"
 #include "../lcmtypes/imu_t.hpp"
-#include "../lcmtypes/slam_pc_t.hpp"
-#include "GridMap.hpp"
 #include "Pose.hpp"
 #include "CoordTransformer.hpp"
 #include <lcm/lcm-cpp.hpp>
@@ -55,16 +53,11 @@ public:
              const std::string & chan,
              const fog_t * fog_data);
 
-  void handlePointCloud(const lcm::ReceiveBuffer * rbuf,
-              const std::string & chan,
-              const slam_pc_t * pc);
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
               const std::string & chan, 
               const imu_t * imu_data);
 
   SLAM::Pose getPose() const;
-
-  void updateMap(const GridMap & new_map);
 
   void reset();
   void reinitializeFOG(double new_initial_fog);
@@ -75,10 +68,9 @@ private:
   void createPredictionParticles(int64_t curr_utime);
   void createParticles(int64_t utime);
 
-  void weightParticles(const slam_pc_t * pc);
+  void weightParticles();
   void weightParticlesWithGPS(const std::pair<double, double> & GPS_basis);
   void weightParticlesWithFOG(const double last_theta);
-  void weightParticlesWithCloud(const slam_pc_t & pc);
 
   void boundLikelihoods(std::vector<double> & likelihoods, double min_likelihood, double max_likelihood) const;
   void setPose(int64_t utime);
@@ -87,7 +79,6 @@ private:
   void clearLikelihoods();
   void updateInternals(int64_t utime);
 
-  GridMap map;
   std::vector<Particle> particles;
   SLAM::Pose last_pose;
 
@@ -107,13 +98,14 @@ private:
   int64_t last_utime;
   std::pair<double, double> previous_gen_coord;
 
-  bool fog_initialized;
 
   // Stores the most recently received message's utime
   int64_t current_utime;
 
   Velocity vel;
   imu_t last_imu_data;
+
+  bool fog_initialized;
 
 };
 

@@ -1,7 +1,0 @@
-struct point3D_t
-{
-	int64_t utime;
-	double x;
-	double y;
-	double z;
-}
