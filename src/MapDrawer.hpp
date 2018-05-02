@@ -20,6 +20,7 @@ class MapDrawer
 public:
   MapDrawer() {
     possibleChans.push_back(std::pair<std::string,sf::Color> (SLAM_STATE_CHANNEL,sf::Color::Red));
+    possibleChans.push_back(std::pair<std::string,sf::Color> (PERFECT_SLAM_STATE_CHANNEL,sf::Color::Blue));
   }
   void startDrawThread();
   void addPose(const SLAM::Pose& pose, std::string channel);

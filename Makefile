@@ -9,7 +9,7 @@ OBJ_PATH = ./obj
 SRC_PATH = ./src
 TEST_PATH = ./unit_tests
 
-all: Localizer Main ParticlePrinter IMUTransformer
+all: Localizer Main ParticlePrinter IMUTransformer PerfectStateGenerator
 
 optimized: FLAGS += $(OPTIMIZATION_FLAGS)
 optimized: all
@@ -38,6 +38,9 @@ ParticlePrinter: $(OBJ_PATH)/ParticlePrinter.o
 
 IMUTransformer: $(OBJ_PATH)/IMUTransformer.o
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUTransformer $(LCM_FLAGS)
+
+PerfectStateGenerator: $(OBJ_PATH)/PerfectStateGenerator.o $(OBJ_PATH)/CoordTransformer.o
+	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/PerfectStateGenerator $(LCM_FLAGS)
 
 report:
 	$(MAKE) -C report 

@@ -18,6 +18,7 @@
 #define PERFECT_GPS_CHANNEL "SENSOR_GPS_PERFECT"
 #define PERFECT_IMU_CHANNEL "SENSOR_IMU_PERFECT"
 #define PERFECT_FOG_CHANNEL "SENSOR_FOG_PERFECT"
+#define PERFECT_SLAM_STATE_CHANNEL "SLAM_STATE_PERFECT"
 
 //GPS related localization coefficients
 //unit is meters
@@ -51,7 +52,7 @@ const static double Y_PREDICTION_SIGMA = 0.1;
 
 //Localization constants that relate the relative beliefs in the various sensors.
 //Magnitudes are irrelevant as long as the ratios are kept consistent
-const static double GPS_LIKELIHOOD_COEFFICIENT = 2.5;
+const static double GPS_LIKELIHOOD_COEFFICIENT = 1.0;
 const static double FOG_LIKELIHOOD_COEFFICIENT = 1.0;
 
 //Map scale

@@ -111,13 +111,13 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
       
       boat[0].position = sf::Vector2f(pix_coord.first + 7, pix_coord.second + 7);
       boat[0].position = rotation.transformPoint(boat[0].position);
-      boat[0].color = sf::Color::Blue;
+      boat[0].color = possibleChans[i].second;
       boat[1].position = sf::Vector2f(pix_coord.first, pix_coord.second - 14);
       boat[1].position = rotation.transformPoint(boat[1].position);
-      boat[1].color = sf::Color::Red;
+      boat[1].color = possibleChans[i].second;
       boat[2].position = sf::Vector2f(pix_coord.first - 7, pix_coord.second + 7);
       boat[2].position = rotation.transformPoint(boat[2].position);
-      boat[2].color = sf::Color::Blue;
+      boat[2].color = possibleChans[i].second;
 
 
       win.draw(boat);
