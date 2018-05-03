@@ -9,7 +9,7 @@ using namespace std;
 Slam::Slam() 
 {
   llcm.subscribe(GPS_CHANNEL, &Slam::handleGPSData, this);
-  llcm.subscribe(IMU_CHANNEL, &Slam::handleIMUData, this);
+  llcm.subscribe(TRANSFORMED_IMU_CHANNEL, &Slam::handleIMUData, this);
 }
 
 void Slam::handleGPSData(const lcm::ReceiveBuffer * rbuf,
