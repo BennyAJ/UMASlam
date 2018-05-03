@@ -9,7 +9,7 @@ OBJ_PATH = ./obj
 SRC_PATH = ./src
 TEST_PATH = ./unit_tests
 
-all: Localizer Main
+all: Localizer Main IMUTransformer
 
 optimized: FLAGS += $(OPTIMIZATION_FLAGS)
 optimized: all
@@ -32,6 +32,9 @@ SLAM: $(OBJ_PATH)/SLAM.o
 
 Main: $(OBJ_PATH)/SLAM.o $(OBJ_PATH)/Localizer.o $(OBJ_PATH)/MapDrawer.o $(OBJ_PATH)/Main.o $(OBJ_PATH)/CoordTransformer.o 	
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/SLAM $(SFML_FLAGS) $(LCM_FLAGS)
+
+IMUTransformer: $(OBJ_PATH)/IMUTransformer.o
+	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUTransformer $(LCM_FLAGS)
 
 report:
 	$(MAKE) -C report 

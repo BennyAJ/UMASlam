@@ -1,0 +1,50 @@
+// for telling if pose_heading_initialized in SLAM
+struct simulator_pose_t
+{
+	int64_t utime;
+    // x,y,z is in meters
+	double x;
+	double y;
+	double z;	// always 0 in current model
+	// roll, pitch, yaw is in radians
+	double roll;
+	double pitch;
+	double yaw;
+
+    // All relative velocities and accelerations
+    double local_linear_acceleration_x;
+    double local_linear_acceleration_y;
+    double local_linear_acceleration_z;
+    
+    double local_linear_velocity_x;
+    double local_linear_velocity_y;
+    double local_linear_velocity_z;
+
+    double local_angular_acceleration_x;
+    double local_angular_acceleration_y;
+    double local_angular_acceleration_z;
+
+    double local_angular_velocity_x;
+    double local_angular_velocity_y;
+    double local_angular_velocity_z;
+
+    // All global velocities and accelerations
+    double global_linear_acceleration_x;
+    double global_linear_acceleration_y;
+    double global_linear_acceleration_z;
+    
+    double global_linear_velocity_x;
+    double global_linear_velocity_y;
+    double global_linear_velocity_z;
+
+    double global_angular_acceleration_x;
+    double global_angular_acceleration_y;
+    double global_angular_acceleration_z;
+
+    double global_angular_velocity_x;
+    double global_angular_velocity_y;
+    double global_angular_velocity_z;
+
+    
+	boolean heading_initialized;
+}
