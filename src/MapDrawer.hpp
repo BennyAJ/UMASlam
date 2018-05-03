@@ -3,12 +3,12 @@
 #include <unordered_map>
 #include "Constants.hpp"
 #include "../lcmtypes/slam_state_t.hpp"
+#include "Pose.hpp"
 #include <SFML/Graphics.hpp>
 #include <lcm/lcm-cpp.hpp>
 #include <mutex>
 #include <vector>
 #include <utility>
-#include "Pose.hpp"
 
 constexpr double WINDOW_HEIGHT = 1600.0;
 constexpr double WINDOW_WIDTH = 1200.0;
@@ -20,7 +20,6 @@ class MapDrawer
 public:
   MapDrawer() {
     possibleChans.push_back(std::pair<std::string,sf::Color> (SLAM_STATE_CHANNEL,sf::Color::Red));
-    possibleChans.push_back(std::pair<std::string,sf::Color> (PERFECT_SLAM_STATE_CHANNEL,sf::Color::Blue));
   }
   void startDrawThread();
   void addPose(const SLAM::Pose& pose, std::string channel);

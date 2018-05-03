@@ -22,8 +22,6 @@ class slam_state_t
 
         double     yaw;
 
-        double     north_angle;
-
         double     lat_origin;
 
         double     lon_origin;
@@ -136,9 +134,6 @@ int slam_state_t::_encodeNoHash(void *buf, int offset, int maxlen) const
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->yaw, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->north_angle, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
-
     tlen = __double_encode_array(buf, offset + pos, maxlen - pos, &this->lat_origin, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
@@ -164,9 +159,6 @@ int slam_state_t::_decodeNoHash(const void *buf, int offset, int maxlen)
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->yaw, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
-    tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->north_angle, 1);
-    if(tlen < 0) return tlen; else pos += tlen;
-
     tlen = __double_decode_array(buf, offset + pos, maxlen - pos, &this->lat_origin, 1);
     if(tlen < 0) return tlen; else pos += tlen;
 
@@ -185,13 +177,12 @@ int slam_state_t::_getEncodedSizeNoHash() const
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
     enc_size += __double_encoded_array_size(NULL, 1);
-    enc_size += __double_encoded_array_size(NULL, 1);
     return enc_size;
 }
 
 int64_t slam_state_t::_computeHash(const __lcm_hash_ptr *)
 {
-    int64_t hash = 0xbb7466f05ed13024LL;
+    int64_t hash = 0x85b27675cf517f8eLL;
     return (hash<<1) + ((hash>>63)&1);
 }
 

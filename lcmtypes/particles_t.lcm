@@ -1,6 +1,0 @@
-struct particles_t
-{
-	int64_t utime;
-	int32_t num_particles;
-	particle_t particles[num_particles];
-}

@@ -1,8 +1,0 @@
-struct particle_t
-{
-	int64_t utime;
-	double x;
-	double y;
-	double theta;
-	double likelihood;
-}

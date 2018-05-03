@@ -2,111 +2,27 @@
 #define __SLAM_LOCALIZER_HPP__
 
 #include "../lcmtypes/gps_t.hpp"
-#include "../lcmtypes/fog_t.hpp"
-#include "../lcmtypes/imu_t.hpp"
-#include "Pose.hpp"
 #include "CoordTransformer.hpp"
+#include "Utilities.hpp"
 #include <lcm/lcm-cpp.hpp>
 #include <string>
 #include <vector>
 #include <random>
 
-struct Particle
-{
-  double x;
-  double y;
-  double theta;
-  double likelihood;
-
-  Particle();
-
-  bool operator<(const Particle & po) const
-  {
-    return po.likelihood < likelihood;
-  }
-};
-
-struct ParticleComparer
-{
-  bool operator()(const Particle & p1, const Particle & p2)
-  {
-    return p2.likelihood < p1.likelihood;
-  }
-};
-
-struct Velocity {
-  double x;
-  double y;
-};
-
 class Localizer
 {
 public:
-  Localizer(int num_particles, double predict_percent);
-  Localizer(int num_particles, double predict_percent, double gps_sigma, double fog_sigma);
-
   void handleGPSData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
              const gps_t * gps_data);
 
-  void handleFOGData(const lcm::ReceiveBuffer * rbuf,
-             const std::string & chan,
-             const fog_t * fog_data);
-
-  void handleIMUData(const lcm::ReceiveBuffer * rbuf,
-              const std::string & chan, 
-              const imu_t * imu_data);
-
-  SLAM::Pose getPose() const;
-
-  void reset();
-  void reinitializeFOG(double new_initial_fog);
-
-  double getFogInitialization() const;
-
 private:
-  void createPredictionParticles(int64_t curr_utime);
-  void createParticles(int64_t utime);
-
-  void weightParticles();
-  void weightParticlesWithGPS(const std::pair<double, double> & GPS_basis);
-  void weightParticlesWithFOG(const double last_theta);
-
-  void boundLikelihoods(std::vector<double> & likelihoods, double min_likelihood, double max_likelihood) const;
-  void setPose(int64_t utime);
   void publishPose() const;
-  void publishParticles() const;
-  void clearLikelihoods();
-  void updateInternals(int64_t utime);
-
-  std::vector<Particle> particles;
-  SLAM::Pose last_pose;
-
   std::pair<double, double> last_coord;
-  double last_theta;
+  double last_yaw;
+  int64_t last_utime;
 
   CoordTransformer coord_transformer;
-
-  std::normal_distribution<> gps_dist;
-  std::normal_distribution<> theta_fog_dist;
-  std::normal_distribution<> x_predict_dist;
-  std::normal_distribution<> y_predict_dist;
-  double initial_theta;
-
-  //variables for predicting particles forward
-  size_t num_predict_particles;
-  int64_t last_utime;
-  std::pair<double, double> previous_gen_coord;
-
-
-  // Stores the most recently received message's utime
-  int64_t current_utime;
-
-  Velocity vel;
-  imu_t last_imu_data;
-
-  bool fog_initialized;
-
 };
 
 #endif

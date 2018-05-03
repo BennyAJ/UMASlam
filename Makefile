@@ -9,7 +9,7 @@ OBJ_PATH = ./obj
 SRC_PATH = ./src
 TEST_PATH = ./unit_tests
 
-all: Localizer Main ParticlePrinter IMUTransformer PerfectStateGenerator
+all: Localizer Main
 
 optimized: FLAGS += $(OPTIMIZATION_FLAGS)
 optimized: all
@@ -30,17 +30,8 @@ Localizer: $(OBJ_PATH)/Localizer.o
 
 SLAM: $(OBJ_PATH)/SLAM.o
 
-Main: $(OBJ_PATH)/SLAM.o $(OBJ_PATH)/Localizer.o $(OBJ_PATH)/MapDrawer.o $(OBJ_PATH)/Main.o $(OBJ_PATH)/CoordTransformer.o $(OBJ_PATH)/FakeCompass.o
+Main: $(OBJ_PATH)/SLAM.o $(OBJ_PATH)/Localizer.o $(OBJ_PATH)/MapDrawer.o $(OBJ_PATH)/Main.o $(OBJ_PATH)/CoordTransformer.o 	
 	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/SLAM $(SFML_FLAGS) $(LCM_FLAGS)
-
-ParticlePrinter: $(OBJ_PATH)/ParticlePrinter.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/ParticlePrinter $(LCM_FLAGS)
-
-IMUTransformer: $(OBJ_PATH)/IMUTransformer.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/IMUTransformer $(LCM_FLAGS)
-
-PerfectStateGenerator: $(OBJ_PATH)/PerfectStateGenerator.o $(OBJ_PATH)/CoordTransformer.o
-	$(CXX) $(FLAGS) $^ -o $(BIN_PATH)/PerfectStateGenerator $(LCM_FLAGS)
 
 report:
 	$(MAKE) -C report 
