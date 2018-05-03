@@ -18,7 +18,8 @@ int main(int argc, char ** argv)
     cout << "started slam thread" << endl;
     MapDrawer drawer;
     lcm::LCM l;
-    l.subscribe(SLAM_STATE_CHANNEL, &MapDrawer::handleState, &drawer);
+    l.subscribe(GPS_STATE_CHANNEL, &MapDrawer::handleState, &drawer);
+    l.subscribe(IMU_STATE_CHANNEL, &MapDrawer::handleState, &drawer);
     drawer.startDrawThread();
     cout << "started draw thread" << endl;
     while(1)

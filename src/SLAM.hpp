@@ -20,6 +20,10 @@ public:
              const std::string & chan,
              const gps_t * gps_data);
 
+  void handleIMUData(const lcm::ReceiveBuffer * rbuf,
+             const std::string & chan,
+             const imu_t * imu_data);
+
   void run();
 
 private:
