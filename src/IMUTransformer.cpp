@@ -9,14 +9,13 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
                     const string & chan,
                     const imu_t * imu_data)
 {
-  /*cout << "imu utime: " << imu_data->utime << endl;
-  cout << "udot: " << imu_data->udot << endl;
-  cout << "vdot: " << imu_data->vdot << endl;
-  cout << "wdot: " << imu_data->wdot << endl;*/
+}
+
+void IMUTransformer::handleSimPose(const lcm::ReceiveBuffer * rbuf,
+           const std::string & chan,
+           const simulator_pose_t * simulator_pose_data)
+{
   imu_t publish_imu;
-  // copy over most of the IMU, then we'll just change the parts
-  // that need to be transformed
-  publish_imu = *imu_data;
 
   // local x acceleration = sideways on the boat = vdot
   // local y acceleration = forward on the boat = udot
@@ -28,47 +27,44 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
   // See 3.2.3 in https://arxiv.org/pdf/1704.06053.pdf for explanation on
   // this transformation.
 
-  // Calculating wdot
-  double wdot_term = imu_data->wdot * cos(imu_data->roll) * cos(imu_data->yaw);
-  double udot_term = imu_data->udot * cos(imu_data->roll) * sin(imu_data->yaw);
-  double vdot_term = -1 * imu_data->vdot * sin(imu_data->roll);
-  publish_imu.wdot = wdot_term + udot_term + vdot_term;
+  //double roll = simulator_pose_data->roll;
+  double pitch = -1 * simulator_pose_data->pitch;
+  double yaw = -1 * simulator_pose_data->yaw;
+  double local_x_accel = simulator_pose_data->local_linear_acceleration_x;
+  double local_y_accel = simulator_pose_data->local_linear_acceleration_y;
+  double local_z_accel = simulator_pose_data->local_linear_acceleration_z;
 
-  // Calculating udot
-  wdot_term = sin(imu_data->pitch) * sin(imu_data->roll) * cos(imu_data->yaw);
-  wdot_term -= cos(imu_data->pitch) * sin(imu_data->yaw);
+  // Calculating vdot
+  double vdot_term = local_x_accel * cos(pitch) * cos(yaw);
+  double udot_term = local_y_accel * cos(pitch) * sin(yaw);
+  double wdot_term = -1 * local_z_accel * sin(pitch);
+  publish_imu.vdot = wdot_term + udot_term + vdot_term;
+
+  /*// Calculating udot
+  wdot_term = sin(imu_data->pitch) * sin(roll) * cos(yaw);
+  wdot_term -= cos(pitch) * sin(yaw);
   wdot_term *= imu_data->wdot;
 
-  udot_term = sin(imu_data->pitch) * sin(imu_data->roll) * sin(imu_data->yaw);
-  udot_term += cos(imu_data->pitch) * cos(imu_data->yaw);
+  udot_term = sin(pitch) * sin(roll) * sin(yaw);
+  udot_term += cos(pitch) * cos(yaw);
   udot_term *= imu_data->udot;
 
-  vdot_term = imu_data->vdot * sin(imu_data->pitch) * cos(imu_data->roll);
+  vdot_term = imu_data->vdot * sin(pitch) * cos(roll);
   publish_imu.udot = wdot_term + udot_term + vdot_term;
 
   // Calculating vdot
-  wdot_term = cos(imu_data->pitch) * sin(imu_data->roll) * cos(imu_data->yaw);
-  wdot_term += sin(imu_data->pitch) * sin(imu_data->yaw);
+  wdot_term = cos(pitch) * sin(roll) * cos(yaw);
+  wdot_term += sin(pitch) * sin(yaw);
   wdot_term *= imu_data->wdot;
 
-  udot_term = cos(imu_data->pitch) * sin(imu_data->roll) * sin(imu_data->yaw);
-  udot_term -= sin(imu_data->pitch) * cos(imu_data->yaw);
+  udot_term = cos(pitch) * sin(roll) * sin(yaw);
+  udot_term -= sin(pitch) * cos(yaw);
   udot_term *= imu_data->udot;
 
-  vdot_term = imu_data->vdot * cos(imu_data->pitch) * cos(imu_data->roll);
-  publish_imu.vdot = wdot_term + udot_term + vdot_term;
+  vdot_term = imu_data->vdot * cos(pitch) * cos(roll);
+  publish_imu.vdot = wdot_term + udot_term + vdot_term;*/
 
   lcm.publish(TRANSFORMED_IMU_CHANNEL, &publish_imu);
-}
-
-void IMUTransformer::handleSimPose(const lcm::ReceiveBuffer * rbuf,
-           const std::string & chan,
-           const simulator_pose_t * simulator_pose_data)
-{
-  /*cout << "sim utime: " << simulator_pose_data->utime << endl;
-  cout << "sim local x accel: " << simulator_pose_data->local_linear_acceleration_x << endl;
-  cout << "sim local y accel: " << simulator_pose_data->local_linear_acceleration_y << endl;
-  cout << "sim local z accel: " << simulator_pose_data->local_linear_acceleration_z << endl;*/
 }
 
 int main() {
