@@ -71,8 +71,8 @@ void MapDrawer::startDraw()
 
 pair<double, double> MapDrawer::convertToPixelCoords(double x, double y)
 {
-  double origin_x = WINDOW_HEIGHT/2.0;
-  double origin_y = WINDOW_WIDTH/2.0;
+  double origin_x = WINDOW_WIDTH/2.0;
+  double origin_y = WINDOW_HEIGHT/2.0;
 
   double pix_per_meter = static_cast<double>(PIX_PER_SQUARE)/SQUARE_SIZE;
 
@@ -80,6 +80,7 @@ pair<double, double> MapDrawer::convertToPixelCoords(double x, double y)
   y *= pix_per_meter;
   x += origin_x;
   y += origin_y;
+  y = WINDOW_HEIGHT - y;
   return pair<double, double>(x,y);
 }
 
@@ -100,11 +101,9 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
   boat.resize(3);
   for(size_t i = 0; i < possibleChans.size(); i++) {
     if(!unOrdMap[possibleChans[i].first].empty()) {
-      double pose_x = unOrdMap[possibleChans[i].first].back().y;
-      double pose_y = -unOrdMap[possibleChans[i].first].back().x;
+      double pose_x = unOrdMap[possibleChans[i].first].back().x;
+      double pose_y = unOrdMap[possibleChans[i].first].back().y;
 
-      // We need to rotate everything by 90 degrees to get the map to draw
-      // with north facing upwards. That's why we flip X and Y
       pair<double, double> pix_coord = convertToPixelCoords(pose_x, pose_y);
       sf::Transform rotation;
       rotation.rotate(unOrdMap[possibleChans[i].first].back().theta * (180/M_PI), pix_coord.first, pix_coord.second);
@@ -118,7 +117,6 @@ void MapDrawer::drawBoat(sf::RenderWindow & win)
       boat[2].position = sf::Vector2f(pix_coord.first - 7, pix_coord.second + 7);
       boat[2].position = rotation.transformPoint(boat[2].position);
       boat[2].color = possibleChans[i].second;
-
 
       win.draw(boat);
     }
@@ -138,7 +136,7 @@ void MapDrawer::drawPoses(sf::RenderWindow & win)
     for(size_t i = 0; i < pose_line.getVertexCount() && i < unOrdMap[possibleChans[c].first].size(); i++)
     {
       SLAM::Pose p = unOrdMap[possibleChans[c].first][i];
-      pair<double, double> coords = convertToPixelCoords(p.y, -p.x);
+      pair<double, double> coords = convertToPixelCoords(p.x, p.y);
       pose_line[i].position = sf::Vector2f(coords.first, coords.second);
       pose_line[i].color = possibleChans[c].second;
     }

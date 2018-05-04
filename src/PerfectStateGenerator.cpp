@@ -21,6 +21,10 @@ void PerfectStateGenerator::handleGPS(const lcm::ReceiveBuffer * rbuf,
   gps_set = true;
   coord_transformer.initialize(perfect_state.lat_origin, perfect_state.lon_origin);
   pair<double, double> coords = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
+  cout << "Latitude: " << gps_data->latitude << endl;
+  cout << "Longitude: " << gps_data->longitude << endl;
+  cout << "X: " << coords.first << endl;
+  cout << "Y: " << coords.second << endl;
   perfect_state.x = coords.first;
   perfect_state.y = coords.second;
 }

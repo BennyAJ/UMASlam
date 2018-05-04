@@ -36,8 +36,8 @@ XYCoord CoordTransformer::transform(double lat, double lon)
   //This is different from how april does it.  April assumes the world has no
   //curvature at the local point.  This does not make that assumption
   //Also April has different radii for ew and ns directions, which this does not
-  double delta_x = d_lat * origin_earth_radius;
-  double delta_y = d_lon * origin_earth_radius * std::cos(origin_lat * M_PI/180.0);
+  double delta_x = d_lon * origin_earth_radius * std::cos(origin_lat * M_PI/180.0);
+  double delta_y = d_lat * origin_earth_radius;
 
   return XYCoord(delta_x, delta_y);
 }
