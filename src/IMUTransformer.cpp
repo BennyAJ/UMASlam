@@ -24,10 +24,11 @@ void IMUTransformer::handleSimPose(const lcm::ReceiveBuffer * rbuf,
   // Roll axis is Y, Pitch axis is X, Yaw axis is Z
   // We need to convert these into XYZ in the earth frame, 
   // where Y is north, X is east, Z is down
-  // See 3.2.3 in https://arxiv.org/pdf/1704.06053.pdf for explanation on
+  // See http://mathworld.wolfram.com/EulerAngles.html x y z (pitch-roll-yaw)
   // this transformation.
+  // We negate ours because we need to rotate clockwise
 
-  //double roll = simulator_pose_data->roll;
+  double roll = -1 * simulator_pose_data->roll;
   double pitch = -1 * simulator_pose_data->pitch;
   double yaw = -1 * simulator_pose_data->yaw;
   double local_x_accel = simulator_pose_data->local_linear_acceleration_x;
@@ -40,29 +41,29 @@ void IMUTransformer::handleSimPose(const lcm::ReceiveBuffer * rbuf,
   double wdot_term = -1 * local_z_accel * sin(pitch);
   publish_imu.vdot = wdot_term + udot_term + vdot_term;
 
-  /*// Calculating udot
-  wdot_term = sin(imu_data->pitch) * sin(roll) * cos(yaw);
-  wdot_term -= cos(pitch) * sin(yaw);
-  wdot_term *= imu_data->wdot;
+  // Calculating udot
+  wdot_term = sin(roll) * sin(pitch) * cos(yaw);
+  wdot_term -= cos(roll) * sin(yaw);
+  wdot_term *= local_x_accel;
 
-  udot_term = sin(pitch) * sin(roll) * sin(yaw);
-  udot_term += cos(pitch) * cos(yaw);
-  udot_term *= imu_data->udot;
+  udot_term = sin(roll) * sin(pitch) * sin(yaw);
+  udot_term += cos(roll) * cos(yaw);
+  udot_term *= local_y_accel;
 
-  vdot_term = imu_data->vdot * sin(pitch) * cos(roll);
+  vdot_term = local_z_accel * cos(pitch) * sin(roll);
   publish_imu.udot = wdot_term + udot_term + vdot_term;
 
   // Calculating vdot
-  wdot_term = cos(pitch) * sin(roll) * cos(yaw);
-  wdot_term += sin(pitch) * sin(yaw);
-  wdot_term *= imu_data->wdot;
+  wdot_term = cos(roll) * sin(pitch) * cos(yaw);
+  wdot_term += sin(roll) * sin(yaw);
+  wdot_term *= local_x_accel;
 
-  udot_term = cos(pitch) * sin(roll) * sin(yaw);
-  udot_term -= sin(pitch) * cos(yaw);
-  udot_term *= imu_data->udot;
+  udot_term = cos(roll) * sin(pitch) * sin(yaw);
+  udot_term -= sin(roll) * cos(yaw);
+  udot_term *= local_y_accel;
 
-  vdot_term = imu_data->vdot * cos(pitch) * cos(roll);
-  publish_imu.vdot = wdot_term + udot_term + vdot_term;*/
+  vdot_term = local_z_accel * cos(pitch) * cos(roll);
+  publish_imu.wdot = wdot_term + udot_term + vdot_term;
 
   lcm.publish(TRANSFORMED_IMU_CHANNEL, &publish_imu);
 }
