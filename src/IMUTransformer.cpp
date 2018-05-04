@@ -23,15 +23,11 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
   // this transformation.
   // We negate ours because we need to rotate clockwise
 
-  double roll = imu_data->roll;
-  double pitch = imu_data->pitch;
-  double yaw = imu_data->yaw;
+  double roll = -1 * imu_data->roll;
+  double pitch = -1 * imu_data->pitch;
+  double yaw = -1 * imu_data->yaw;
   // Convert yaw into range -pi to pi
-  if(yaw > M_PI)
-    yaw = yaw - 2 * M_PI;
-  else if(yaw < -1 * M_PI)
-    yaw = yaw + 2 * M_PI;
-  publish_imu.yaw = yaw;
+  yaw = atan2(sin(yaw), cos(yaw));
   double local_x_accel = imu_data->vdot;
   double local_y_accel = imu_data->udot;
   double local_z_accel = imu_data->wdot;
@@ -40,7 +36,7 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
   double vdot_term = local_x_accel * cos(pitch) * cos(yaw);
   double udot_term = local_y_accel * cos(pitch) * sin(yaw);
   double wdot_term = -1 * local_z_accel * sin(pitch);
-  publish_imu.vdot = -1 * (wdot_term + udot_term + vdot_term);
+  publish_imu.vdot = wdot_term + udot_term + vdot_term;
 
   // Calculating udot
   wdot_term = sin(roll) * sin(pitch) * cos(yaw);
@@ -65,6 +61,8 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
 
   vdot_term = local_z_accel * cos(pitch) * cos(roll);
   publish_imu.wdot = wdot_term + udot_term + vdot_term;
+
+  publish_imu.yaw = yaw;
 
   lcm.publish(TRANSFORMED_IMU_CHANNEL, &publish_imu);
 }

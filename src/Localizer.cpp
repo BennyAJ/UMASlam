@@ -48,6 +48,11 @@ void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
   double time_diff = (imu_state.utime - last_imu_utime) / 1000000.0;
   current_vel.x += time_diff * ((last_accel.x + imu_data->vdot) / 2);
   current_vel.y += time_diff * ((last_accel.y + imu_data->udot) / 2);
+  
+  //cout << "current vel x: " << current_vel.x << endl;
+  //cout << "current vel y: " << current_vel.y << endl;
+  cout << "last accel x: " << last_accel.x << endl;
+  cout << "last accel y: " << last_accel.y << endl;
 
   // Trapezoidal Riemann sum between last two velocities to find position 
   imu_state.x += time_diff * ((last_vel.x + current_vel.x) / 2);
@@ -63,5 +68,7 @@ void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
     imu_state.lon_origin = 0;
   }
 
+  last_accel.x = imu_data->vdot;
+  last_accel.y = imu_data->udot;
   l.publish(IMU_STATE_CHANNEL, &imu_state);
 }
