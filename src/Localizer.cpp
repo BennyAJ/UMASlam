@@ -1,6 +1,5 @@
 #include "Localizer.hpp"
 #include "Constants.hpp"
-#include "../lcmtypes/slam_state_t.hpp"
 #include <iostream>
 
 using namespace std;
@@ -19,7 +18,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
 
 void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
            const std::string & chan,
-           const imu_t * imu_data)
+           const global_imu_t * imu_data)
 {
   // Initialize the utime so we don't get an incorrect riemann sum on
   // the first time step. This means we'll lose the very first IMU
@@ -38,18 +37,18 @@ void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
 
   // Trapezoidal Riemann sum between last two accelerations to find velocity
   double time_diff = (imu_state.utime - last_imu_utime) / 1000000.0;
-  current_vel.x += time_diff * ((last_accel.x + imu_data->vdot) / 2);
-  current_vel.y += time_diff * ((last_accel.y + imu_data->udot) / 2);
+  current_vel.north += time_diff * ((last_accel.north + imu_data->north_accel) / 2);
+  current_vel.east += time_diff * ((last_accel.east + imu_data->east_accel) / 2);
 
   // Trapezoidal Riemann sum between last two velocities to find position 
-  imu_state.x += time_diff * ((last_vel.x + current_vel.x) / 2);
-  imu_state.y += time_diff * ((last_vel.y + current_vel.y) / 2);
+  imu_state.y += time_diff * ((last_vel.north + current_vel.north) / 2);
+  imu_state.x += time_diff * ((last_vel.east + current_vel.east) / 2);
 
   imu_state.lat_origin = coord_transformer.getOriginLat();
   imu_state.lon_origin = coord_transformer.getOriginLon();
 
-  last_accel.x = imu_data->vdot;
-  last_accel.y = imu_data->udot;
+  last_accel.north = imu_data->north_accel;
+  last_accel.east = imu_data->east_accel;
 
   l.publish(IMU_STATE_CHANNEL, &imu_state);
 }

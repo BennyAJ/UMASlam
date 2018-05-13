@@ -21,7 +21,7 @@ void Slam::handleGPSData(const lcm::ReceiveBuffer * rbuf,
 
 void Slam::handleIMUData(const lcm::ReceiveBuffer * rbuf,
              const string & chan,
-             const imu_t * imu_data)
+             const global_imu_t * imu_data)
 {
   localizer.handleIMUData(rbuf, chan, imu_data);
 }

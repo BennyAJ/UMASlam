@@ -4,6 +4,7 @@
 #include "../lcmtypes/slam_state_t.hpp"
 #include "../lcmtypes/gps_t.hpp"
 #include "../lcmtypes/imu_t.hpp"
+#include "../lcmtypes/global_imu_t.hpp"
 #include "CoordTransformer.hpp"
 #include "Utilities.hpp"
 #include <lcm/lcm-cpp.hpp>
@@ -13,8 +14,8 @@
 #include <utility>
 
 struct Vec2 {
-  double x;
-  double y;
+  double north;
+  double east;
 };
 
 class Localizer
@@ -32,7 +33,7 @@ public:
 
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const imu_t * imu_data);
+             const global_imu_t * imu_data);
 
   void publishGPSState(const gps_t * gps_data);
 

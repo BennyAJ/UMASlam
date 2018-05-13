@@ -1,0 +1,13 @@
+struct global_imu_t {
+	int64_t utime;
+
+  double pitch;
+  double roll;
+  double yaw;
+
+	double north_accel;
+	double east_accel;
+	double down_accel;
+	
+	double total_accel;
+}

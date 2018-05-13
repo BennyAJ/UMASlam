@@ -22,7 +22,7 @@ public:
 
   void handleIMUData(const lcm::ReceiveBuffer * rbuf,
              const std::string & chan,
-             const imu_t * imu_data);
+             const global_imu_t * imu_data);
 
   void run();
 
