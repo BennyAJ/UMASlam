@@ -89,7 +89,7 @@ void IMUTransformer::handleIMU(const lcm::ReceiveBuffer * rbuf,
 int main() {
   IMUTransformer imuTransformer;
   lcm::LCM lcm;
-  lcm.subscribe(PERFECT_IMU_CHANNEL, &IMUTransformer::handleIMU, &imuTransformer);
+  lcm.subscribe(IMU_CHANNEL, &IMUTransformer::handleIMU, &imuTransformer);
 
   while(1) {
     lcm.handle();
