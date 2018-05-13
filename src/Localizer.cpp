@@ -14,15 +14,7 @@ void Localizer::handleGPSData(const lcm::ReceiveBuffer * rbuf,
   {
     coord_transformer.initialize(gps_data->latitude, gps_data->longitude);
   }
-  
-  gps_state.utime = gps_data->utime;
-  pair<double, double> last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
-  gps_state.x = last_coord.first;
-  gps_state.y = last_coord.second;
-  gps_state.yaw = DEG_TO_RAD(gps_data->course_over_ground);
-  gps_state.lat_origin = coord_transformer.getOriginLat();
-  gps_state.lon_origin = coord_transformer.getOriginLon();
-  l.publish(GPS_STATE_CHANNEL, &gps_state);
+  publishGPSState(gps_data);
 }
 
 void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
@@ -48,27 +40,29 @@ void Localizer::handleIMUData(const lcm::ReceiveBuffer * rbuf,
   double time_diff = (imu_state.utime - last_imu_utime) / 1000000.0;
   current_vel.x += time_diff * ((last_accel.x + imu_data->vdot) / 2);
   current_vel.y += time_diff * ((last_accel.y + imu_data->udot) / 2);
-  
-  //cout << "current vel x: " << current_vel.x << endl;
-  //cout << "current vel y: " << current_vel.y << endl;
-  cout << "last accel x: " << last_accel.x << endl;
-  cout << "last accel y: " << last_accel.y << endl;
 
   // Trapezoidal Riemann sum between last two velocities to find position 
   imu_state.x += time_diff * ((last_vel.x + current_vel.x) / 2);
   imu_state.y += time_diff * ((last_vel.y + current_vel.y) / 2);
 
-  // Initialize to 0, 0 if no GPS initialization has been done
-  if(coord_transformer.isInitialized()) {
-    imu_state.lat_origin = coord_transformer.getOriginLat();
-    imu_state.lon_origin = coord_transformer.getOriginLon();
-  }
-  else {
-    imu_state.lat_origin = 0;
-    imu_state.lon_origin = 0;
-  }
+  imu_state.lat_origin = coord_transformer.getOriginLat();
+  imu_state.lon_origin = coord_transformer.getOriginLon();
 
   last_accel.x = imu_data->vdot;
   last_accel.y = imu_data->udot;
+
   l.publish(IMU_STATE_CHANNEL, &imu_state);
+}
+
+void Localizer::publishGPSState(const gps_t * gps_data) {
+  slam_state_t gps_state;
+
+  gps_state.utime = gps_data->utime;
+  pair<double, double> last_coord = coord_transformer.transform(gps_data->latitude, gps_data->longitude);
+  gps_state.x = last_coord.first;
+  gps_state.y = last_coord.second;
+  gps_state.yaw = DEG_TO_RAD(gps_data->course_over_ground);
+  gps_state.lat_origin = coord_transformer.getOriginLat();
+  gps_state.lon_origin = coord_transformer.getOriginLon();
+  l.publish(GPS_STATE_CHANNEL, &gps_state);
 }

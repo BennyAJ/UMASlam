@@ -34,17 +34,19 @@ public:
              const std::string & chan,
              const imu_t * imu_data);
 
+  void publishGPSState(const gps_t * gps_data);
+
 private:
   lcm::LCM l;
 
-  slam_state_t gps_state;
-
-  bool imu_state_initialized;
   slam_state_t imu_state;
+  bool imu_state_initialized;
   int64_t last_imu_utime;
   Vec2 last_accel;
   Vec2 last_vel;
   Vec2 current_vel;
+
+  double last_imu_angle;
 
   CoordTransformer coord_transformer;
 };

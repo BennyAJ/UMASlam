@@ -23,6 +23,12 @@ public:
 
 private:
   lcm::LCM lcm;
+  double sum_udot;
+  double num_udot;
+  double sum_vdot;
+  double num_vdot;
+  double sum_wdot;
+  double num_wdot;
 };
 
 #endif
